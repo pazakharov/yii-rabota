@@ -1635,7 +1635,7 @@ input[type="file"] {
 .datepicker-wrap img {
     position: absolute;
     right: 8px;
-    top: 10px;
+    top: 32px;
 }
 
 .company-profile-info__block {

@@ -8,6 +8,7 @@ use app\models\ResumeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\VarDumper;
 
 /**
  * ResumeController implements the CRUD actions for Resume model.
@@ -64,14 +65,18 @@ class ResumeController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Resume();
+        $resume = new Resume();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $resume->load(Yii::$app->request->post());
+
+        $resume->author_id = 1;
+
+        if ($resume->save()) {
+            return $this->redirect(['view', 'id' => $resume->id]);
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $resume,
         ]);
     }
 

@@ -41,7 +41,7 @@ AppAsset::register($this);
                 </div>
                 <ul class="navigation-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Все резюме</a>
+                        <a class="nav-link" href="<?php echo Url::toRoute('resume/index')?>">Все резюме</a>
                     </li>
                    
                    
@@ -51,7 +51,7 @@ AppAsset::register($this);
                     echo '  <a class="nav-link" href="'.Url::toRoute('site/signup').'">Регистрация</a>';
                     echo '</li> ';
                     echo '<li class="nav-item">';
-                    echo '  <a class="nav-link" href="'.Url::toRoute('/site/login').'">Войти</a>';
+                    echo '  <a class="nav-link" href="'.Url::toRoute('site/login').'">Войти</a>';
                     echo '</li> ';
                     }else{
                         ?><li class="nav-item">
@@ -142,10 +142,9 @@ AppAsset::register($this);
     </footer>
 </div>
 
+<?php $this->endBody() ?>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous">
-</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
 </script>
@@ -156,7 +155,7 @@ AppAsset::register($this);
 <script src="js/jquery.nselect.min.js"></script>
 <script src="js/bootstrap-datepicker.js"></script>
 <script src="js/bootstrap-datepicker.ru.min.js"></script>
-<?php $this->endBody() ?>
+<script src="js/jquery-editable-select.js"></script>
 </body>
 
 </html>

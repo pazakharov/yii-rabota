@@ -19,6 +19,7 @@ use Yii;
  * @property string $phone
  * @property int $specialization_id
  * @property string|null $about
+ * @property file|null $foto
  *
  * @property Specializations $specialization
  * @property User $author
@@ -46,6 +47,7 @@ class Resume extends \yii\db\ActiveRecord
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
+            [['foto'], 'file', 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -67,10 +69,11 @@ class Resume extends \yii\db\ActiveRecord
             'phone' => Yii::t('app', 'Phone'),
             'specialization_id' => Yii::t('app', 'Specialization ID'),
             'about' => Yii::t('app', 'About'),
+            'foto' => Yii::t('app', 'Foto'),
         ];
     }
 
-    /**
+     /**
      * Gets query for [[Specialization]].
      *
      * @return \yii\db\ActiveQuery|\app\Query\models\SpecializationsQuery
