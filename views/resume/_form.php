@@ -20,7 +20,10 @@ use yii\helpers\Url;
     <?php ActiveForm::end(); ?>
     </div>
     <!--END FORM 1-->
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+              
+       
+    ]); ?>
     <div class="row mb32">
         <div class="col-lg-2 col-md-3 dflex-acenter">
             <div class="paragraph">Фото</div>
@@ -40,7 +43,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
 
-            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100' ]) ?>
+            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -48,7 +51,7 @@ use yii\helpers\Url;
             <div class="paragraph">Имя</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'first_name')->textInput(['class' => 'dor-input w100' ]) ?>
+            <?= $form->field($model, 'first_name')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -56,7 +59,7 @@ use yii\helpers\Url;
             <div class="paragraph">Отчество</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'middle_name')->textInput(['class' => 'dor-input w100' ]) ?>
+            <?= $form->field($model, 'middle_name')->textInput(['class' => 'dor-input w100' ])->label(false)->label(false) ?>
         </div>
     </div>
     <div class="row mb24">
@@ -65,7 +68,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
-                <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input' ]) ?>
+                <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input' ])->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">
             </div>
         </div>
@@ -101,7 +104,7 @@ use yii\helpers\Url;
             <div class="paragraph">Город проживания</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-        <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100' ]) ?>
+        <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -116,7 +119,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="p-rel">
-                <?= $form->field($model, 'mail')->textInput(['class' => 'dor-input w100' ]) ?>
+                <?= $form->field($model, 'mail')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
             </div>
         </div>
     </div>
@@ -126,7 +129,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div style="width: 140px;" class="p-rel mobile-w100">
-            <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100' , 'placeholder' => '+7 ___ ___-__-__']) ?>   
+            <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100' , 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>   
             </div>
         </div>
     </div>
@@ -143,7 +146,7 @@ use yii\helpers\Url;
             <div class="citizenship-select">
             <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
                                                          ->Select(['name','id'])->indexBy('id')
-                                                         ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselect-1']) ?>
+                                                         ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselect-1'])->label(false) ?>
                
             </div>
         </div>

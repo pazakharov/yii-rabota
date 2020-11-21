@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\models\common\Grafik;
+use app\models\common\Resumegrafik;
 
 /**
  * This is the model class for table "resume".
@@ -83,7 +85,7 @@ class Resume extends \yii\db\ActiveRecord
         return $this->hasOne(Specializations::className(), ['id' => 'specialization_id']);
     }
 
-    /**
+     /**
      * Gets query for [[Author]].
      *
      * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
@@ -91,6 +93,27 @@ class Resume extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::className(), ['id' => 'author_id']);
+    } 
+    
+    /**
+     * Gets query for [[Grafiks]].
+     *
+     * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
+     */
+    
+     public function getResumegrafik()
+    {
+        return $this->hasMany(Resumegrafik::className(), ['resume_id' => 'id']);
+    }
+     /**
+     * Gets query for [[Grafiks]].
+     *
+     * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
+     */
+    
+     public function getGrafiks()
+    {
+        return $this->hasMany(Grafik::className(), ['id' => 'grafik_id'])->via('resumegrafik');
     }
 
     /**

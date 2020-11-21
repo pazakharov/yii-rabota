@@ -25,6 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+            <?php foreach($model->grafiks as $grafik){
+                    echo $grafik->name;
+            }
+               
+                ?>
 
     <?= DetailView::widget([
         'model' => $model,

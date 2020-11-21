@@ -13,7 +13,9 @@ body {
     margin-right: 0;
     margin-left: 0;
 }
-
+.help-block{
+    display: none;
+}
 .logout, .logout:hover{
     margin:0;
     color:white;
@@ -1635,7 +1637,7 @@ input[type="file"] {
 .datepicker-wrap img {
     position: absolute;
     right: 8px;
-    top: 32px;
+    top: 10px;
 }
 
 .company-profile-info__block {
