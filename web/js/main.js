@@ -75,3 +75,27 @@ $(function () {
         $('#' + $("input:radio[name='radio-group3']:checked").val()).show();
     });
 });
+
+
+$(function () {
+    $("#fotochooser").click(function () {
+        $("#resumeFotoFile").click( );
+    });
+});
+
+$(function () {
+    $('#resumeFotoFile').on("change", function () {
+        $.ajax({
+            type: 'POST',
+            url: UrlFotoForm,
+            data: new FormData(document.getElementById("resumeFotoForm")),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $("#resumeimg").attr("src",response);
+                $("#resume-foto").attr("value",response);
+            }
+        });
+    });
+});
+

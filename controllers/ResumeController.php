@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\VarDumper;
+use yii\web\UploadedFile;
+use app\models\UploadImage;
 
 /**
  * ResumeController implements the CRUD actions for Resume model.
@@ -66,17 +68,20 @@ class ResumeController extends Controller
     public function actionCreate()
     {
         $resume = new Resume();
+        $image = new UploadImage();
 
         $resume->load(Yii::$app->request->post());
 
         $resume->author_id = 1;
 
+        
         if ($resume->save()) {
             return $this->redirect(['view', 'id' => $resume->id]);
         }
 
         return $this->render('create', [
             'model' => $resume,
+            'model2' => $image,
         ]);
     }
 
@@ -113,6 +118,40 @@ class ResumeController extends Controller
 
         return $this->redirect(['index']);
     }
+/**
+     * Upload foto for resume.
+     * If Upload is successful, the browser will resive response.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpload()
+    {
+        
+        
+        if (Yii::$app->request->isPost) {
+
+            $imageModel = new UploadImage();
+
+               
+
+            $imageModel->imageFile = UploadedFile::getInstance($imageModel,"imageFile");
+            
+            if (Yii::$app->request->isPost) {
+                
+                return $imageModel->upload();
+            
+            }else{
+              
+                return "uploads/noavatar.png";
+            
+            }
+        }
+
+        
+    }
+
+
 
     /**
      * Finds the Resume model based on its primary key value.

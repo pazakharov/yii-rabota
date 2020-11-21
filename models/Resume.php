@@ -47,7 +47,7 @@ class Resume extends \yii\db\ActiveRecord
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
-            [['foto'], 'file', 'extensions' => 'png, jpg'],
+            [['foto'], 'string', 'max' => '255'],
         ];
     }
 

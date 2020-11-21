@@ -4,23 +4,32 @@ use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 Use app\models\Specializations;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Resume */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+
 <div class="col-12">
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <div class="row"><div class="col" id="show1"></div></div>
+    <div class="row mb32">
+    <?php $form = ActiveForm::begin(['options' => ['id'=>'resumeFotoForm','enctype' => 'multipart/form-data']]); ?>
+    <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
+    <?php ActiveForm::end(); ?>
+    </div>
+    <!--END FORM 1-->
+    <?php $form = ActiveForm::begin(); ?>
     <div class="row mb32">
         <div class="col-lg-2 col-md-3 dflex-acenter">
             <div class="paragraph">Фото</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="profile-foto-upload mb8"><img src="images/profile-foto.jpg" alt="foto">
+            <div class="profile-foto-upload mb8"><img id="resumeimg" src="uploads/noavatar.png" alt="foto">
             </div>
-            <label class="custom-file-upload">
-                <?= $form->field($model, 'foto')->fileInput() ?>
+            <label id="fotochooser" class="custom-file-upload">
+                <?= $form->field($model, 'foto')->hiddenInput(['value'=> "uploads/noavatar.png"])->label(false); ?>
                 Изменить фото
             </label>
         </div>
@@ -447,8 +456,9 @@ Use app\models\Specializations;
     <?php ActiveForm::end(); ?>
 </div>
 
-
-
+<script>
+  var UrlFotoForm = "<?php echo Url::toRoute('resume/upload');?>";
+</script>
 
 
 
