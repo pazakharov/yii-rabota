@@ -14,8 +14,7 @@ use yii\helpers\Url;
 
 
 <div class="col-12">
-    <div class="row"><div class="col" id="show1"></div></div>
-    <div class="row mb32">
+    <div style="height:0;" class="row hidden">
     <?php $form = ActiveForm::begin(['options' => ['id'=>'resumeFotoForm','enctype' => 'multipart/form-data']]); ?>
     <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
     <?php ActiveForm::end(); ?>
@@ -166,7 +165,10 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="p-rel">
-                <input placeholder="От" type="text" class="dor-input w100">
+                <?= $form->field($model, 'zp')->textInput(['class' => 'dor-input w100',
+                                                            'placeholder' => "От" 
+                                                            ])->label(false) ?>
+                
                 <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
             </div>
         </div>
@@ -220,15 +222,18 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
-                <?= $form->field($model,'grafiks')->checkboxList(Grafik::find()
+           
+                <?= $form->field($model,'GrafikArray')->checkboxList(Grafik::find()
                                                             ->select(['name','id'])
                                                             ->indexBy('id')
                                                             ->column(),[
                                                                 'item'=>function ($index, $label, $name, $checked, $value){
+                                                                    $ch = '';
+                                                                    if($checked == 1) {$ch = 'checked';}
 
                                                                                 return '<div class="form-check d-flex">
-                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input"
-                                                                                        id="grafikCheck'.$index.'" '.$checked.'>
+                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input" value="'.$value.'"
+                                                                                        id="grafikCheck'.$index.'" '.$ch.'>
                                                                                     <label class="form-check-label"
                                                                                         for="grafikCheck'.$index.'"></label>
                                                                                     <label for="grafikCheck'.$index.'"
@@ -442,7 +447,7 @@ use yii\helpers\Url;
             <div class="paragraph">О себе</div>
         </div>
         <div class="col-lg-5 col-md-7 col-12">
-            <?= $form->field($model, 'about')->textarea(['class'=>'dor-input w100 h176 mb8']) ?>
+            <?= $form->field($model, 'about')->textarea(['class'=>'dor-input w100 h176 mb8'])->label(false) ?>
         </div>
     </div>
     <div class="row mb128 mobile-mb64">

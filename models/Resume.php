@@ -21,6 +21,7 @@ use Symfony\Component\Console\Helper\Dumper;
  * @property string $mail
  * @property string $phone
  * @property int $specialization_id
+ * @property int $zp
  * @property string|null $about
  * @property file|null $foto
  *
@@ -29,6 +30,11 @@ use Symfony\Component\Console\Helper\Dumper;
  */
 class Resume extends \yii\db\ActiveRecord
 {
+
+
+    private $_grafik_buffer;
+
+
     /**
      * {@inheritdoc}
      */
@@ -43,8 +49,8 @@ class Resume extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id'], 'required'],
-            [['author_id', 'specialization_id'], 'integer'],
+            [['author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id','zp'], 'required'],
+            [['author_id', 'specialization_id','zp'], 'integer'],
             [['birthdate'], 'safe'],
             [['GrafikArray'], 'safe'],
             [['about'], 'string'],
@@ -61,20 +67,21 @@ class Resume extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'author_id' => Yii::t('app', 'Author ID'),
-            'first_name' => Yii::t('app', 'First Name'),
-            'middle_name' => Yii::t('app', 'Middle Name'),
-            'last_name' => Yii::t('app', 'Last Name'),
-            'birthdate' => Yii::t('app', 'Birthdate'),
-            'sex' => Yii::t('app', 'Sex'),
-            'city' => Yii::t('app', 'City'),
+            'id' => Yii::t('app', 'ID резюме'),
+            'author_id' => Yii::t('app', 'ID Автора резюме'),
+            'first_name' => Yii::t('app', 'Имя'),
+            'middle_name' => Yii::t('app', 'Отчество'),
+            'last_name' => Yii::t('app', 'Фамилия'),
+            'birthdate' => Yii::t('app', 'Др'),
+            'sex' => Yii::t('app', 'Пол'),
+            'city' => Yii::t('app', 'Город'),
             'mail' => Yii::t('app', 'Mail'),
-            'phone' => Yii::t('app', 'Phone'),
-            'specialization_id' => Yii::t('app', 'Specialization ID'),
-            'about' => Yii::t('app', 'About'),
-            'foto' => Yii::t('app', 'Foto'),
+            'phone' => Yii::t('app', 'Телефон'),
+            'specialization_id' => Yii::t('app', 'ID Специализации'),
+            'about' => Yii::t('app', 'Обо мне'),
+            'foto' => Yii::t('app', 'Фото'),
             'GrafikArray' => Yii::t('app', 'График'),
+            'zp' => Yii::t('app', 'Зарплата'),
 
         ];
     }
@@ -120,9 +127,18 @@ class Resume extends \yii\db\ActiveRecord
         return $this->hasMany(Grafik::className(), ['id' => 'grafik_id'])->via('resumegrafik');
     }
     
+    public function setGrafikArray($array)
+    {
+        $this->_grafik_buffer = (array)$array;
+    }
+
     public function getGrafikArray()
     {
-        return $this->Grafiks->select('id')->column();
+        if ($this->_grafik_buffer === null){
+            $this->_grafik_buffer =  $this->getGrafiks()->select('id')->column();
+        }
+
+        return  $this->_grafik_buffer; 
     }
 
     /**
@@ -143,6 +159,7 @@ class Resume extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
     
+    
     public function beforeValidate()
     {
         
@@ -150,5 +167,40 @@ class Resume extends \yii\db\ActiveRecord
 
         return parent::beforeValidate();
     }
+
+   
+    /**
+     * @param mixed $insert
+     * @param mixed $changedAttributes
+     * 
+     * @return [type]
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->_updateGrafik();
+
+       return parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * @return bool
+     */
+    private function _updateGrafik()
+    {
+        $this->unlinkAll('grafiks', true);
+
+        
+        
+
+        foreach( $this->_grafik_buffer as $key => $grafik_id )
+        {
+            
+        $this->link('grafiks', Grafik::findOne(['id' => $grafik_id]));
+
+        }
+
+
+    }
+
 
 }
