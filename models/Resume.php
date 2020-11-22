@@ -37,6 +37,7 @@ class Resume extends \yii\db\ActiveRecord
     private $_grafik_buffer;
     private $_z_buffer;
 
+    public $opyt;    
 
     /**
      * {@inheritdoc}

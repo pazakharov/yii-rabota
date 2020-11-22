@@ -99,3 +99,44 @@ $(function () {
     });
 });
 
+$(function () {
+
+    $('input:radio[name="Resume[opyt]"]').on('change', function (){
+        if ($(this).val() === '0') {
+            
+              $('#exp_div').slideUp("slow");      
+              $('#add_div').slideUp("slow");     
+
+        }else{
+          
+              $('#exp_div').slideDown("slow");      
+              $('#add_div').slideDown("slow");      
+        }
+    });
+
+});
+
+$(function () {
+
+    $('#add').on('click', function (){
+        
+       $($($($('#stamp').html()).hide()).appendTo('#exp_div')).slideDown('2000'); 
+
+    
+
+    });
+
+});
+
+$(function () {
+
+    $('body').on('click','.delbutton', function (e){
+        
+        $(this).closest('.mesto').slideUp('2000', function (e){
+            $(this).closest('.mesto').remove();
+        } );
+        
+
+    });
+
+});

@@ -23,6 +23,9 @@ body {
 .nav-item form {
     margin:0;
 }
+.hidden{
+display:none;    
+}
 .col,
 .col-1,
 .col-10,

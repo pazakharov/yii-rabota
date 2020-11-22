@@ -33,8 +33,11 @@ class ResumeController extends Controller
     }
 
     /**
+     * 
      * Lists all Resume models.
+     * 
      * @return mixed
+     * 
      */
     public function actionIndex()
     {
@@ -88,7 +91,7 @@ class ResumeController extends Controller
 
         }else{
             
-            $resume->author_id = 1;
+            
             $resume->foto = "uploads/noavatar.png";
             $resume->birthdate = date('Y-m-d');
 
@@ -120,11 +123,15 @@ class ResumeController extends Controller
       
         }
 
+        $model->opyt = 0;
+
         return $this->render('update', [
             
             'model' => $model,
             
             'model2' => $image,
+
+
       
          ]);
     }
