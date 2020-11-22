@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use app\models\common\Grafik;
 use app\models\common\Resumegrafik;
+use Symfony\Component\Console\Helper\Dumper;
 
 /**
  * This is the model class for table "resume".
@@ -45,6 +46,7 @@ class Resume extends \yii\db\ActiveRecord
             [['author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id'], 'required'],
             [['author_id', 'specialization_id'], 'integer'],
             [['birthdate'], 'safe'],
+            [['GrafikArray'], 'safe'],
             [['about'], 'string'],
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
@@ -72,6 +74,8 @@ class Resume extends \yii\db\ActiveRecord
             'specialization_id' => Yii::t('app', 'Specialization ID'),
             'about' => Yii::t('app', 'About'),
             'foto' => Yii::t('app', 'Foto'),
+            'GrafikArray' => Yii::t('app', 'График'),
+
         ];
     }
 
@@ -115,6 +119,11 @@ class Resume extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Grafik::className(), ['id' => 'grafik_id'])->via('resumegrafik');
     }
+    
+    public function getGrafikArray()
+    {
+        return $this->Grafiks->select('id')->column();
+    }
 
     /**
      * {@inheritdoc}
@@ -124,4 +133,22 @@ class Resume extends \yii\db\ActiveRecord
     {
         return new \app\Query\models\ResumeQuery(get_called_class());
     }
+
+    public function beforeSave($insert) {
+
+        
+        $this->birthdate = \DateTime::createFromFormat('d.m.Y',$this->birthdate)->format('Y-m-d');
+        
+              
+        return parent::beforeSave($insert);
+    }
+    
+    public function beforeValidate()
+    {
+        
+        $this->author_id = Yii::$app->user->id;
+
+        return parent::beforeValidate();
+    }
+
 }

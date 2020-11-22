@@ -42,8 +42,11 @@ class ResumeController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+
             'searchModel' => $searchModel,
+
             'dataProvider' => $dataProvider,
+
         ]);
     }
 
@@ -53,10 +56,13 @@ class ResumeController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    
+     public function actionView($id)
     {
         return $this->render('view', [
+
             'model' => $this->findModel($id),
+
         ]);
     }
 
@@ -68,21 +74,31 @@ class ResumeController extends Controller
     public function actionCreate()
     {
         $resume = new Resume();
+        
         $image = new UploadImage();
 
-        $resume->load(Yii::$app->request->post());
-
-        $resume->author_id = 1;
-
         
+        
+        $resume->load(Yii::$app->request->post());
+       
+               
         if ($resume->save()) {
+          
             return $this->redirect(['view', 'id' => $resume->id]);
-        }
 
-        return $this->render('create', [
+        }else{
+            
+            $resume->author_id = 1;
+            $resume->foto = "uploads/noavatar.png";
+            $resume->birthdate = date('Y-m-d');
+
+            return $this->render('create', [
+
             'model' => $resume,
+            
             'model2' => $image,
-        ]);
+            ]);
+        }
     }
 
     /**
@@ -93,16 +109,24 @@ class ResumeController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
-    {
+    {   
+        $image = new UploadImage();
+       
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           
             return $this->redirect(['view', 'id' => $model->id]);
+      
         }
 
         return $this->render('update', [
+            
             'model' => $model,
-        ]);
+            
+            'model2' => $image,
+      
+         ]);
     }
 
     /**

@@ -35,6 +35,15 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'formatter' => [
+            'dateFormat' => 'dd.MM.YYYY',
+            'timeFormat' => 'php:H:i:s',
+            'decimalSeparator' => ',',
+            'thousandSeparator' => ' ',
+            'defaultTimeZone' => 'UTC',
+            'timeZone' => 'Europe/Moscow',
+            'locale' => 'ru-RU'
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

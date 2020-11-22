@@ -1,5 +1,6 @@
 <?php
 
+use app\models\common\Grafik;
 use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -29,10 +30,10 @@ use yii\helpers\Url;
             <div class="paragraph">Фото</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="profile-foto-upload mb8"><img id="resumeimg" src="uploads/noavatar.png" alt="foto">
+            <div class="profile-foto-upload mb8"><img id="resumeimg" src="<?=$model->foto;?>" alt="foto">
             </div>
             <label id="fotochooser" class="custom-file-upload">
-                <?= $form->field($model, 'foto')->hiddenInput(['value'=> "uploads/noavatar.png"])->label(false); ?>
+                <?= $form->field($model, 'foto')->hiddenInput()->label(false); ?>
                 Изменить фото
             </label>
         </div>
@@ -68,7 +69,9 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
-                <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input' ])->label(false) ?>
+                <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input',
+                                                                'value' =>  \DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y')]
+                )->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">
             </div>
         </div>
@@ -82,11 +85,14 @@ use yii\helpers\Url;
                 <?=
                     $form->field($model, 'sex')
                         ->radioList(
-                            [1 => 'Мужской', 0 => 'Женский'],
+                            [1 => 'Мужской', 2 => 'Женский'],
                             [
                                 'item' => function($index, $label, $name, $checked, $value) {
 
-                                    $return = '<li><input type="radio" id="test'.$index.'" name="'.$name.'" value="'.$value.'"'.$checked.'>';
+                                    $ch = '';
+                                    if($checked == 1) {$ch = 'checked';}
+
+                                    $return = '<li><input type="radio" id="test'.$index.'" name="'.$name.'" value="'.$value.'"'.$ch.'>';
                                     $return .=  '<label for="test'.$index.'">'.ucwords($label).'</label></li>';
                                     
                                     
@@ -147,7 +153,10 @@ use yii\helpers\Url;
             <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
                                                          ->Select(['name','id'])->indexBy('id')
                                                          ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselect-1'])->label(false) ?>
-               
+           
+           
+           
+           
             </div>
         </div>
     </div>
@@ -168,6 +177,9 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
+
+            
+
                 <div class="form-check d-flex">
                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1"></label>
@@ -208,36 +220,23 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck6">
-                    <label class="form-check-label" for="exampleCheck6"></label>
-                    <label for="exampleCheck6" class="profile-info__check-text job-resolution-checkbox">Полный
-                        день</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck7">
-                    <label class="form-check-label" for="exampleCheck7"></label>
-                    <label for="exampleCheck7" class="profile-info__check-text job-resolution-checkbox">Сменный
-                        график</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck8">
-                    <label class="form-check-label" for="exampleCheck8"></label>
-                    <label for="exampleCheck8" class="profile-info__check-text job-resolution-checkbox">Гибкий
-                        график</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck9">
-                    <label class="form-check-label" for="exampleCheck9"></label>
-                    <label for="exampleCheck9" class="profile-info__check-text job-resolution-checkbox">Удалённая
-                        работа</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck10">
-                    <label class="form-check-label" for="exampleCheck10"></label>
-                    <label for="exampleCheck10" class="profile-info__check-text job-resolution-checkbox">Вахтовый
-                        метод</label>
-                </div>
+                <?= $form->field($model,'grafiks')->checkboxList(Grafik::find()
+                                                            ->select(['name','id'])
+                                                            ->indexBy('id')
+                                                            ->column(),[
+                                                                'item'=>function ($index, $label, $name, $checked, $value){
+
+                                                                                return '<div class="form-check d-flex">
+                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input"
+                                                                                        id="grafikCheck'.$index.'" '.$checked.'>
+                                                                                    <label class="form-check-label"
+                                                                                        for="grafikCheck'.$index.'"></label>
+                                                                                    <label for="grafikCheck'.$index.'"
+                                                                                        class="profile-info__check-text job-resolution-checkbox">'.$label.'</label>
+                                                                                </div>';
+                                    
+                                                                        }
+                                                            ])->label(false);  ?>
             </div>
         </div>
     </div>

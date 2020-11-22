@@ -3,6 +3,7 @@
 namespace app\models\common;
 
 use Yii;
+use app\models\Resume;
 
 /**
  * This is the model class for table "resumegrafik".
@@ -68,4 +69,6 @@ class Resumegrafik extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Resume::className(), ['id' => 'resume_id']);
     }
+
+   
 }
