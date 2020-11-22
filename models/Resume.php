@@ -4,7 +4,9 @@ namespace app\models;
 
 use Yii;
 use app\models\common\Grafik;
+use app\models\common\Zanaytost;
 use app\models\common\Resumegrafik;
+use app\models\common\Resumezanyatost;
 use Symfony\Component\Console\Helper\Dumper;
 
 /**
@@ -33,6 +35,7 @@ class Resume extends \yii\db\ActiveRecord
 
 
     private $_grafik_buffer;
+    private $_z_buffer;
 
 
     /**
@@ -49,10 +52,10 @@ class Resume extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id','zp'], 'required'],
+            [['GrafikArray','ZArray','author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id','zp'], 'required'],
             [['author_id', 'specialization_id','zp'], 'integer'],
             [['birthdate'], 'safe'],
-            [['GrafikArray'], 'safe'],
+            [['GrafikArray','ZArray'], 'safe'],
             [['about'], 'string'],
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
@@ -81,7 +84,9 @@ class Resume extends \yii\db\ActiveRecord
             'about' => Yii::t('app', 'Обо мне'),
             'foto' => Yii::t('app', 'Фото'),
             'GrafikArray' => Yii::t('app', 'График'),
+            'ZArray' => Yii::t('app', 'Занятость'),
             'zp' => Yii::t('app', 'Зарплата'),
+                
 
         ];
     }
@@ -127,6 +132,29 @@ class Resume extends \yii\db\ActiveRecord
         return $this->hasMany(Grafik::className(), ['id' => 'grafik_id'])->via('resumegrafik');
     }
     
+       /**
+     * Gets query for [[Resumezanyatosts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getResumezanyatosts()
+    {
+        return $this->hasMany(Resumezanyatost::className(), ['resume_id' => 'id']);
+    }
+
+ /**
+     * Gets query for [[Zanyatost]].
+     *
+     * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
+     */
+    
+    public function getZanyatosts()
+    {
+        return $this->hasMany(Zanaytost::className(), ['id' => 'zanyatost_id'])->via('resumezanyatosts');
+    }
+
+
+
     public function setGrafikArray($array)
     {
         $this->_grafik_buffer = (array)$array;
@@ -140,6 +168,27 @@ class Resume extends \yii\db\ActiveRecord
 
         return  $this->_grafik_buffer; 
     }
+     
+    
+    public function setZArray($array)
+    {
+        $this->_z_buffer = (array)$array;
+    }
+
+    public function getZArray()
+    {
+        if ($this->_z_buffer === null){
+            $this->_z_buffer =  $this->getZanyatosts()->select('id')->column();
+        }
+
+        return  $this->_z_buffer; 
+    }
+    
+
+
+
+
+
 
     /**
      * {@inheritdoc}
@@ -178,6 +227,8 @@ class Resume extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         $this->_updateGrafik();
+        $this->_updateZanyatost();
+
 
        return parent::afterSave($insert, $changedAttributes);
     }
@@ -196,6 +247,24 @@ class Resume extends \yii\db\ActiveRecord
         {
             
         $this->link('grafiks', Grafik::findOne(['id' => $grafik_id]));
+
+        }
+
+
+    }
+
+
+    private function _updateZanyatost()
+    {
+        $this->unlinkAll('zanyatosts', true);
+
+        
+        
+
+        foreach( $this->_z_buffer as $key => $z_id )
+        {
+            
+        $this->link('zanyatosts', Zanaytost::findOne(['id' => $z_id]));
 
         }
 

@@ -1,6 +1,7 @@
 <?php
 
 use app\models\common\Grafik;
+use app\models\common\Zanaytost;
 use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,9 +16,9 @@ use yii\helpers\Url;
 
 <div class="col-12">
     <div style="height:0;" class="row hidden">
-    <?php $form = ActiveForm::begin(['options' => ['id'=>'resumeFotoForm','enctype' => 'multipart/form-data']]); ?>
-    <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
-    <?php ActiveForm::end(); ?>
+        <?php $form = ActiveForm::begin(['options' => ['id'=>'resumeFotoForm','enctype' => 'multipart/form-data']]); ?>
+        <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
+        <?php ActiveForm::end(); ?>
     </div>
     <!--END FORM 1-->
     <?php $form = ActiveForm::begin([
@@ -109,7 +110,7 @@ use yii\helpers\Url;
             <div class="paragraph">Город проживания</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-        <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
+            <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -134,7 +135,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div style="width: 140px;" class="p-rel mobile-w100">
-            <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100' , 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>   
+                <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100' , 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>
             </div>
         </div>
     </div>
@@ -149,13 +150,13 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="citizenship-select">
-            <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
+                <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
                                                          ->Select(['name','id'])->indexBy('id')
                                                          ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselect-1'])->label(false) ?>
-           
-           
-           
-           
+
+
+
+
             </div>
         </div>
     </div>
@@ -168,7 +169,7 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'zp')->textInput(['class' => 'dor-input w100',
                                                             'placeholder' => "От" 
                                                             ])->label(false) ?>
-                
+
                 <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
             </div>
         </div>
@@ -180,39 +181,26 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-            
+                <?= $form->field($model,'ZArray')->checkboxList(Zanaytost::find()
+                                                            ->select(['name','id'])
+                                                            ->indexBy('id')
+                                                            ->column(),[
+                                                                'item'=>function ($index, $label, $name, $checked, $value){
+                                                                    $ch = '';
+                                                                    if($checked == 1) {$ch = 'checked';}
 
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1"></label>
-                    <label for="exampleCheck1" class="profile-info__check-text job-resolution-checkbox">Полная
-                        занятость</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                    <label class="form-check-label" for="exampleCheck2"></label>
-                    <label for="exampleCheck2" class="profile-info__check-text job-resolution-checkbox">Частичная
-                        занятость</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                    <label class="form-check-label" for="exampleCheck3"></label>
-                    <label for="exampleCheck3"
-                        class="profile-info__check-text job-resolution-checkbox">Проектная/Временная
-                        работа</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck4">
-                    <label class="form-check-label" for="exampleCheck4"></label>
-                    <label for="exampleCheck4"
-                        class="profile-info__check-text job-resolution-checkbox">Волонтёрство</label>
-                </div>
-                <div class="form-check d-flex">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck5">
-                    <label class="form-check-label" for="exampleCheck5"></label>
-                    <label for="exampleCheck5"
-                        class="profile-info__check-text job-resolution-checkbox">Стажировка</label>
-                </div>
+                                                                                return '<div class="form-check d-flex">
+                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input" value="'.$value.'"
+                                                                                        id="zCheck'.$index.'" '.$ch.'>
+                                                                                    <label class="form-check-label"
+                                                                                        for="zCheck'.$index.'"></label>
+                                                                                    <label for="zCheck'.$index.'"
+                                                                                        class="profile-info__check-text job-resolution-checkbox">'.$label.'</label>
+                                                                                </div>';
+                                    
+                                                                        }
+                                                            ])->label(false);  ?>
+
             </div>
         </div>
     </div>
@@ -222,7 +210,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
-           
+
                 <?= $form->field($model,'GrafikArray')->checkboxList(Grafik::find()
                                                             ->select(['name','id'])
                                                             ->indexBy('id')
@@ -454,39 +442,15 @@ use yii\helpers\Url;
         <div class="col-lg-2 col-md-3">
         </div>
         <div class="col-lg-10 col-md-9">
-        <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'link orange-btn  link-orange-btn']) ?>
+            <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'link orange-btn  link-orange-btn']) ?>
         </div>
     </div>
-   
-    
+
+
 
     <?php ActiveForm::end(); ?>
 </div>
 
 <script>
-  var UrlFotoForm = "<?php echo Url::toRoute('resume/upload');?>";
+    var UrlFotoForm = "<?php echo Url::toRoute('resume/upload');?>";
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
