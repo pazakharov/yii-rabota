@@ -7,7 +7,8 @@ use app\models\common\Grafik;
 use app\models\common\Zanaytost;
 use app\models\common\Resumegrafik;
 use app\models\common\Resumezanyatost;
-use Symfony\Component\Console\Helper\Dumper;
+use app\models\Opyt;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "resume".
@@ -37,7 +38,8 @@ class Resume extends \yii\db\ActiveRecord
     private $_grafik_buffer;
     private $_z_buffer;
 
-    public $opyt;    
+    public $opyt;
+     
 
     /**
      * {@inheritdoc}
@@ -54,15 +56,15 @@ class Resume extends \yii\db\ActiveRecord
     {
         return [
             [['GrafikArray','ZArray','author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id','zp'], 'required'],
-            [['author_id', 'specialization_id','zp'], 'integer'],
+            [['author_id', 'specialization_id','zp','created_at', 'updated_at'], 'integer'],
             [['birthdate'], 'safe'],
-            [['GrafikArray','ZArray'], 'safe'],
+            [['GrafikArray','ZArray','opyt'], 'safe'],
             [['about'], 'string'],
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
             [['foto'], 'string', 'max' => '255'],
-        ];
+              ];
     }
 
     /**
@@ -87,9 +89,20 @@ class Resume extends \yii\db\ActiveRecord
             'GrafikArray' => Yii::t('app', 'График'),
             'ZArray' => Yii::t('app', 'Занятость'),
             'zp' => Yii::t('app', 'Зарплата'),
+            'opyt' => Yii::t('app', 'Опыт работы'),
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
                 
 
         ];
+    }
+
+
+    public function behaviors()
+    {
+         return [
+             TimestampBehavior::className(),
+                 ];
     }
 
      /**
@@ -111,6 +124,24 @@ class Resume extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'author_id']);
     } 
+    
+    public function getAge()
+    {
+
+        $age = (int)(date ( 'Y' )) - (int)substr($this->birthdate, 0, 4);
+        
+        
+        
+        $age = $age. ' ' .$this->_decline($age , ['год', 'года', 'лет']);
+
+
+        return $age;
+    } 
+
+    private function _decline($num, $forms) {
+            
+        return $num%10==1&&$num%100!=11?$forms[0]:($num%10>=2&&$num%10<=4&&($num%100<10||$num%100>=20)?$forms[1]:$forms[2]);
+    }
     
     /**
      * Gets query for [[Grafiks]].
@@ -186,8 +217,35 @@ class Resume extends \yii\db\ActiveRecord
     }
     
 
+/**
+     * Gets query for [[Opyts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOpyts()
+    {
+        return  $this->hasMany(Opyt::className(), ['resume_id' => 'id']);
 
+    }
 
+    /**
+     * Gets query for [[Opyts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOpyt_check()
+    {
+        //var_dump($this->getOpyts()->count());die;
+       
+        if( $this->getOpyts()->count() > 0){
+
+            return 1;
+        }else{
+
+            return null;
+        }
+
+    }
 
 
 
@@ -202,10 +260,8 @@ class Resume extends \yii\db\ActiveRecord
 
     public function beforeSave($insert) {
 
-        
         $this->birthdate = \DateTime::createFromFormat('d.m.Y',$this->birthdate)->format('Y-m-d');
         
-              
         return parent::beforeSave($insert);
     }
     
@@ -225,14 +281,50 @@ class Resume extends \yii\db\ActiveRecord
      * 
      * @return [type]
      */
-    public function afterSave($insert, $changedAttributes)
+    
+     public function afterSave($insert, $changedAttributes)
     {
         $this->_updateGrafik();
         $this->_updateZanyatost();
+        $this->_updateOpyt();
 
+       
 
        return parent::afterSave($insert, $changedAttributes);
     }
+
+    private function _updateOpyt()
+    {
+        if( count($this->opyt) > 0 )
+        {   
+            Opyt::deleteAll('resume_id = '.$this->id);
+
+            foreach($this->opyt as $opyt)
+            {   
+                $opyt['resume_id'] = $this->id;
+
+                $opyt['date1'] =   $opyt['year1'].'-'.$opyt['month1'].'-01 00:00:00';  
+                
+                if(isset($opyt['present_check'])){
+
+                    $opyt['date2'] = '0000-00-01 00:00:00'  ;
+
+                }else{
+                    $opyt['date2'] =  $opyt['year2'].'-'.$opyt['month2'].'-01 00:00:00';  
+                } 
+                
+                $Opyt_model = new Opyt();
+                
+                $Opyt_model->attributes = $opyt;
+
+                $Opyt_model->save();               
+                
+            }
+
+        }    
+        
+    }
+
 
     /**
      * @return bool
@@ -240,9 +332,6 @@ class Resume extends \yii\db\ActiveRecord
     private function _updateGrafik()
     {
         $this->unlinkAll('grafiks', true);
-
-        
-        
 
         foreach( $this->_grafik_buffer as $key => $grafik_id )
         {

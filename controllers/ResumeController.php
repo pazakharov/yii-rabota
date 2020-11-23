@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\VarDumper;
 use yii\web\UploadedFile;
 use app\models\UploadImage;
+use yii\data\ActiveDataProvider;
 
 /**
  * ResumeController implements the CRUD actions for Resume model.
@@ -41,16 +42,34 @@ class ResumeController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ResumeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // $searchModel = new ResumeSearch();
+       
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
+        // return $this->render('index_new', [
 
-            'searchModel' => $searchModel,
+        //     'searchModel' => $searchModel,
 
-            'dataProvider' => $dataProvider,
+        //     'dataProvider' => $dataProvider,
 
+        // ]);
+
+      
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => Resume::find()->with('specialization')->with('opyts'),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
         ]);
+
+       
+        
+        
+
+        return $this->render('index_new', ['dataProvider' => $dataProvider]);
+
+
     }
 
     /**
@@ -117,16 +136,19 @@ class ResumeController extends Controller
        
         $model = $this->findModel($id);
 
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
            
+            
             return $this->redirect(['view', 'id' => $model->id]);
       
         }
-
-        $model->opyt = 0;
-
-        return $this->render('update', [
             
+           // var_dump($model); die;  
+            return $this->render('update', [
+            
+             
+
             'model' => $model,
             
             'model2' => $image,

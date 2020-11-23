@@ -21,7 +21,7 @@ $(function () {
 });
 
 $(function () {
-    $('.nselect-1').nSelect();
+    $('.nselectlist-static').nSelect();
     $('#no-filter').editableSelect({
         filter: false
     });
@@ -101,7 +101,7 @@ $(function () {
 
 $(function () {
 
-    $('input:radio[name="Resume[opyt]"]').on('change', function (){
+    $('input:radio[name="Resume[opyt_check]"]').on('change', function (){
         if ($(this).val() === '0') {
             
               $('#exp_div').slideUp("slow");      
@@ -118,12 +118,33 @@ $(function () {
 
 $(function () {
 
-    $('#add').on('click', function (){
+    $('body').on('click', '#add', function (){
+
+       var index =  $('.mesto').length ;
+       
+                          
+        $($($($('#stamp').html()).hide()).appendTo('#exp_div')).slideDown('2000'); 
+       
+        $('#exp_div .mesto:last').html($('#exp_div .mesto:last').html().replace(/iteration/g, index));
+         
+       
+        $('#exp_div .mesto:last .nselectlist').nSelect();
         
-       $($($($('#stamp').html()).hide()).appendTo('#exp_div')).slideDown('2000'); 
 
+    }); 
     
+    $('body').on('change', '[id^="Date2-check-"]', function (){
 
+        //alert ($(this).attr('index'));
+        if($('input[index='+ $(this).attr('index') +']').prop("checked")){
+           
+            $('div[index='+ $(this).attr('index') +']').slideUp('slow');
+        
+        }else{
+            
+            $('div[index='+ $(this).attr('index') +']').slideDown('slow');
+        }        
+        
     });
 
 });

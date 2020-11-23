@@ -1782,6 +1782,7 @@ input[type="file"] {
     padding: 16px 12px 8px 20px;
     border: 1px solid #B8D1DE;
     border-radius: 4px;
+    min-height: 190px;
 }
 
 .my-vacancies-block {

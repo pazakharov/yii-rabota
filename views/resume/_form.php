@@ -70,7 +70,8 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
                 <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input',
-                                                                'value' =>  \DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y')]
+                                                                'value' => \DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y')
+                                                                ]
                 )->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">
             </div>
@@ -151,7 +152,7 @@ use yii\helpers\Url;
             <div class="citizenship-select">
                 <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
                                                          ->Select(['name','id'])->indexBy('id')
-                                                         ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselect-1'])->label(false) ?>
+                                                         ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselectlist-static'])->label(false) ?>
 
 
 
@@ -239,12 +240,12 @@ use yii\helpers\Url;
     </div>
     <div class="row mb32">
         <div class="col-lg-2 col-md-3">
-            <div class="paragraph">Опыт работы</div>
+            <div class="paragraph"></div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
 
-                <?=$form->field($model, 'opyt')
+              <?=$form->field($model, 'opyt_check')
                         ->radioList(
                             [1 => 'Есть опыт', 0 => 'Нет опыта работы'],
                             [
@@ -268,10 +269,26 @@ use yii\helpers\Url;
         </div>
     </div>
 
-    <div id="exp_div" class="row <?php if($model->opyt === 0){echo 'hidden';}?>">
+    <div id="exp_div" class="row <?php if($model->opyt_check === 0){echo 'hidden';}?>">
+     
+    <?php 
+    
+    $index = 0;
+   
+    foreach($model->opyts as $rabota){
+
+        echo $this->render('_opyt', ['rabota' => $rabota,'index' => $index, 'form' => $form]);
+       
+        $index++;
+
+    }
+    
+    
+    
+    ?>
 
     </div>
-    <div id="add_div" class="row mb32 <?php if($model->opyt === 0){echo 'hidden';}?>">
+    <div id="add_div" class="row mb32 <?php if($model->opyt_check === 0){echo 'hidden';}?>">
         <div class="row"><button type="button" class="btn btn-link" id="add">+ Добавить место работы</button></div>
     </div>
 
@@ -300,7 +317,7 @@ use yii\helpers\Url;
 
 
     <div id="stamp" class="hidden">
-        <div class="mesto">
+        <div class="mesto w100">
             <div class="row mb24">
                 <div class="col-lg-2 col-md-3">
                 </div>
@@ -315,35 +332,51 @@ use yii\helpers\Url;
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
-                            <select class="nselect-1" data-title="Май">
-                                <option value="01">Июнь</option>
-                                <option value="02">Июль</option>
-                                <option value="03">Август</option>
-                                <option value="04">Сентябрь</option>
+                            <select name="Resume[opyt][iteration][month1]" class="nselectlist" data-title="Месяц">
+                                <option value="01">Январь</option>
+                                <option value="02">Февраль</option>
+                                <option value="03">Март</option>
+                                <option value="04">Апрель</option>
+                                <option value="05">Май</option>
+                                <option value="06">Июнь</option>
+                                <option value="07">Июль</option>
+                                <option value="08">Август</option>
+                                <option value="09">Сентябрь</option>
+                                <option value="10">Октябрь</option>
+                                <option value="11">Ноябрь</option>
+                                <option value="12">Декабрь</option>
                             </select>
                         </div>
                         <div class="citizenship-select w100">
-                            <input placeholder="2006" type="text" class="dor-input w100">
+                            <input name="Resume[opyt][iteration][year1]" placeholder="2006" type="text" class="dor-input w100">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb8">
+            <div class="row mb8 date2-iteration" index="iteration">
                 <div class="col-lg-2 col-md-3 dflex-acenter">
                     <div class="paragraph">Окончание работы</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
-                            <select class="nselect-1" data-title="Март">
-                                <option value="01">Июнь</option>
-                                <option value="02">Июль</option>
-                                <option value="03">Август</option>
-                                <option value="04">Сентябрь</option>
+                            <select name="Resume[opyt][iteration][month2]" class="nselectlist" data-title="Месяц">
+                            <option value="01">Январь</option>
+                                <option value="02">Февраль</option>
+                                <option value="03">Март</option>
+                                <option value="04">Апрель</option>
+                                <option value="05">Май</option>
+                                <option value="06">Июнь</option>
+                                <option value="07">Июль</option>
+                                <option value="08">Август</option>
+                                <option value="09">Сентябрь</option>
+                                <option value="10">Октябрь</option>
+                                <option value="11">Ноябрь</option>
+                                <option value="12">Декабрь</option>
                             </select>
                         </div>
                         <div class="citizenship-select w100">
-                            <input placeholder="2006" type="text" class="dor-input w100">
+                            <input name="Resume[opyt][iteration][year2]" placeholder="2006" type="text" class="dor-input w100">
                         </div>
                     </div>
                 </div>
@@ -354,9 +387,9 @@ use yii\helpers\Url;
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="profile-info">
                         <div class="form-check d-flex">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1112">
-                            <label class="form-check-label" for="exampleCheck1112"></label>
-                            <label for="exampleCheck1112" class="profile-info__check-text job-resolution-checkbox">По
+                            <input name="Resume[opyt][iteration][present_check]" type="checkbox" index="iteration" class="form-check-input" id="Date2-check-iteration">
+                            <label class="form-check-label" for="Date2-check-iteration"></label>
+                            <label for="Date2-check-iteration" class="profile-info__check-text job-resolution-checkbox">По
                                 настоящее
                                 время</label>
                         </div>
@@ -368,7 +401,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Организация</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
-                    <input type="text" class="dor-input w100">
+                    <input name="Resume[opyt][iteration][organization]" type="text" class="dor-input w100">
                 </div>
             </div>
             <div class="row mb16">
@@ -376,7 +409,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Должность</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
-                    <input type="text" class="dor-input w100">
+                    <input name="Resume[opyt][iteration][position]" type="text" class="dor-input w100">
                 </div>
             </div>
             <div class="row mb64 mobile-mb32">
@@ -384,7 +417,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Обязанности, функции, достижения</div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-12">
-                    <textarea class="dor-input w100 h96 mb8"
+                    <textarea name="Resume[opyt][iteration][duties]" class="dor-input w100 h96 mb8"
                         placeholder="Расскажите о своих обязанностях, функциях и достижениях"></textarea>
                             <div class="mb24"><button type="button" class="delbutton btn btn-link">Удалить место работы</button></div>
 
@@ -393,3 +426,6 @@ use yii\helpers\Url;
         </div>
     </div>
 </div>
+<script>
+    var UrlFotoForm = "<?php echo Url::toRoute('resume/upload');?>";
+</script>

@@ -26,36 +26,31 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="content">
         <div class="container">
-            <h1 class="main-title mt24 mb16">$this->title</h1>
+            <h1 class="main-title mt24 mb16"><?=$this->title?></h1>
             <button class="vacancy-filter-btn">Фильтр</button>
             <div class="row">
                 <div class="col-lg-9 desctop-992-pr-16">
-                    <div class="d-flex align-items-center flex-wrap mb8">
-                        <span class="paragraph mr16">Найдено 3 резюме</span>
-                        <div class="vakancy-page-header-dropdowns">
-                            <div class="vakancy-page-wrap show mr16">
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">За день</a>
-                                    <a class="dropdown-item" href="#">За год</a>
-                                    <a class="dropdown-item" href="#">За все время</a>
-                                </div>
-                            </div>
-                            <div class="vakancy-page-wrap show">
-                                <a class="vakancy-page-btn vakancy-btn dropdown-toggle" href="#" role="button"
-                                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                                   aria-expanded="false">
-                                    По новизне
-                                    <i class="fas fa-angle-down arrowDown"></i>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">По новизне</a>
-                                    <a class="dropdown-item" href="#">По возрастанию зарплаты</a>
-                                    <a class="dropdown-item" href="#">По убыванию зарплаты</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     
+                    
+                    <?=ListView::widget([
+                                            'dataProvider' => $dataProvider,
+                                            'itemView' => '_short_resume',
+                                            'itemOptions' => [
+                                                'tag' => false,
+
+                                            ],
+                                            'pager' => [
+                                                'pagination'=> [
+                                                    'pageSize' => 5,
+                                                    
+                                                ]
+                                            ],
+                                            'layout' =>  $this->render('_summary'),                                
+                                            
+                                            
+                                        ]);?>
+
+
                     <ul class="dor-pagination mb128">
                         <li class="page-link-prev"><a href="#"><img class="mr8"
                                                                     src="images/mini-left-arrow.svg" alt="arrow"> Назад</a>
@@ -218,48 +213,3 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-
-
-
-
-
-<div class="resume-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    
-    <p>
-        <?php if(!Yii::$app->user->isGuest){
-            echo Html::a(Yii::t('app', 'Создать новое резюме'), ['create'], ['class' => 'btn btn-success']);
-            }else{echo 'Авторизуйтесь и создайте свое резюме';} ?>
-    </p>
-    
-
-
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'author_id',
-            'first_name',
-            'middle_name',
-            'last_name',
-            //'birthdate',
-            //'sex',
-            //'city',
-            //'mail',
-            //'phone',
-            //'specialization_id',
-            //'about:ntext',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-
-</div>

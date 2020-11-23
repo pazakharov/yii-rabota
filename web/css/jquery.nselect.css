@@ -163,7 +163,7 @@
 
 .nselect.nsOrange .nselect__head:after {
   right: 10px;
-  top: 8px;
+  top: 15px;
   content: url(../images/blue-arrow-down.svg);
   position: absolute;
   -webkit-transition: -webkit-transform 0.15s;
