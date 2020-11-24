@@ -235,7 +235,6 @@ class Resume extends \yii\db\ActiveRecord
      */
     public function getOpyt_check()
     {
-        //var_dump($this->getOpyts()->count());die;
        
         if( $this->getOpyts()->count() > 0){
 

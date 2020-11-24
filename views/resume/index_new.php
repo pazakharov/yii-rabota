@@ -1,9 +1,10 @@
 <?php
 use yii\widgets\ListView;
-use yii\data\ActiveDataProvider;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+use \app\models\Specializations;
+use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ResumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -12,6 +13,7 @@ $this->title = Yii::t('app', 'Резюме');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php Pjax::begin(); ?>
 <div class="header-search">
         <div class="container">
             <div class="header-search__wrap">
@@ -66,52 +68,44 @@ $this->params['breadcrumbs'][] = $this->title;
                         </li>
                     </ul>
                 </div>
+                
                 <div class="col-lg-3 desctop-992-pl-16 d-flex flex-column vakancy-page-filter-block vakancy-page-filter-block-dnone">
+                   <form id="searchform" action="<?=Url::current()?>">
                     <div
                             class="vakancy-page-filter-block__row mobile-flex-992 mb24 d-flex justify-content-between align-items-center">
                         <div class="heading">Фильтр</div>
                         <img class="cursor-p" src="images/big-cancel.svg" alt="cancel">
                     </div>
                     <div class="signin-modal__switch-btns-wrap resume-list__switch-btns-wrap mb16">
-                        <a href="#" class="signin-modal__switch-btn active">Все</a>
-                        <a href="#" class="signin-modal__switch-btn ">Мужчины</a>
-                        <a href="#" class="signin-modal__switch-btn ">Женщины</a>
+                        <a href="<?=Url::current(['sex' => null])?>" class="signin-modal__switch-btn <?=!isset($params['sex'])?'active':'' ?>">Все</a>
+                        <a href="<?=Url::current(['sex' => '1'])?>" class="signin-modal__switch-btn <?=isset($params['sex']) && $params['sex'] == '1' ?'active':'' ?>">Мужчины</a>
+                        <a href="<?=Url::current(['sex' => '2'])?>" class="signin-modal__switch-btn <?=isset($params['sex']) && $params['sex'] == '2' ?'active':'' ?>">Женщины</a>
                     </div>
                     <div class="vakancy-page-filter-block__row mb24">
                         <div class="paragraph cadet-blue">Город</div>
                         <div class="citizenship-select">
-                            <select class="nselect-1">
-                                <option value="01">Кемерово</option>
-                                <option value="02">Новосибирск</option>
-                                <option value="03">Иркутск</option>
-                                <option value="04">Красноярск</option>
-                                <option value="05">Барнаул</option>
-                            </select>
+                       <?//=$params['city']?> <? //var_dump($cities)?>
+                        <?= Html::dropDownList('city', isset($params['city'])?$params['city']:'' , $cities,['class' => 'nselectlist-static formelement','id'=>'citylist', 'prompt' => '']) ?>
                         </div>
                     </div>
                     <div class="vakancy-page-filter-block__row mb24">
                         <div class="paragraph cadet-blue">Зарплата</div>
-                        <div class="p-rel">
-                            <input placeholder="Любая" type="text" class="dor-input w100">
-                            <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
+                        <div class="d-flex">
+                        <?= Html::input('text', 'zp1',isset($params['zp1'])?$params['zp1']:'' , ['class' => 'dor-input w100 ','placeholder' => 'От','id'=>'zp1']) ?><img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
+                        <?= Html::input('text', 'zp2',isset($params['zp2'])?$params['zp2']:'' , ['class' => 'dor-input  w100','placeholder' => 'До','id'=>'zp2']) ?><img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
                         </div>
                     </div>
                     <div class="vakancy-page-filter-block__row mb24">
                         <div class="paragraph cadet-blue">Специализация</div>
                         <div class="citizenship-select">
-                            <select class="nselect-1" data-title="Любая">
-                                <option value="01">Фронтенд</option>
-                                <option value="02">Бекенд</option>
-                                <option value="03">Дизайн</option>
-                                <option value="04">Тестировщик</option>
-                            </select>
-                        </div>
+                        <?= Html::dropDownList('specialization_id',isset($params['specialization_id'])?$params['specialization_id']:'' , Specializations::find()->Select(['name','id'])->indexBy('id')->column(),['prompt'=>'Выберете специализацию..','id'=>'specialization','class' => 'nselectlist-static']) ?>
+                    </div>
                     </div>
                     <div class="vakancy-page-filter-block__row mb24">
                         <div class="paragraph cadet-blue">Возраст</div>
                         <div class="d-flex">
-                            <input placeholder="От" type="text" class="dor-input w100">
-                            <input placeholder="До" type="text" class="dor-input w100">
+                        <?= Html::input('text', 'birthdate1',isset($params['birthdate1'])?$params['birthdate1']:'' , ['class' => 'dor-input w100 ','placeholder' => 'От','id'=>'birthdate1']) ?><img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
+                        <?= Html::input('text', 'birthdate2',isset($params['birthdate2'])?$params['birthdate2']:'' , ['class' => 'dor-input  w100','placeholder' => 'До','id'=>'birthdate2']) ?><img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
                         </div>
                     </div>
                     <div class="vakancy-page-filter-block__row mb24">
@@ -203,13 +197,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>
                     </div>
-                    <div
-                            class="vakancy-page-filter-block__row vakancy-page-filter-block__show-vakancy-btns mb24 d-flex flex-wrap align-items-center mobile-jus-cont-center">
-                        <a class="link-orange-btn orange-btn mr24 mobile-mb12" href="#">Показать <span>1 230</span>
-                            вакансии</a>
+                    <div class="vakancy-page-filter-block__row vakancy-page-filter-block__show-vakancy-btns mb24 d-flex flex-wrap align-items-center mobile-jus-cont-center">
+                        <button type="submit" class="link-orange-btn orange-btn mr24 mobile-mb12" href="#">Показать <span>1 230</span>
+                            вакансии</button>
                         <a href="#">Сбросить все</a>
                     </div>
+                                        </form>
                 </div>
             </div>
         </div>
     </div>
+    <?php Pjax::end(); ?>

@@ -128,7 +128,7 @@ $(function () {
         $('#exp_div .mesto:last').html($('#exp_div .mesto:last').html().replace(/iteration/g, index));
          
        
-        $('#exp_div .mesto:last .nselectlist').nSelect();
+        $('#exp_div .mesto:last .nselectlist').nselect();
         
 
     }); 
@@ -159,5 +159,101 @@ $(function () {
         
 
     });
+
+});
+
+$(function () {
+     
+    $(document).on('change', '#searchform', function (event) {
+
+        // $(this).closest('form').submit( function(e){
+
+        //     jQuery.pjax.submit(e, '#p0');
+
+        // });
+
+        var NewUri = new URI("?r=resume/index");
+        
+        let searchParams = new URLSearchParams(window.location.search)
+       
+        if(searchParams.has('sex') ){
+            let sex = searchParams.get('sex');
+            NewUri.addSearch("sex", sex);
+            console.log('sex=' + sex);
+        }
+        
+        var city = $('#citylist option:selected').text();
+        
+        if(city !== '' ){
+            NewUri.addSearch("city", city);
+            console.log('city=' + city);
+        } 
+        
+        var zp1 = $('#zp1').val();
+        if(zp1 !== '' ){
+            console.log('zp1=' + zp1);
+            NewUri.addSearch("zp1", zp1);
+        }
+        
+        var zp2 = $('#zp2').val();
+        if(zp1 !== '' ){
+            console.log('zp2=' + zp2);
+            NewUri.addSearch("zp2", zp2);
+        }
+        
+        var birthdate1 = $('#birthdate1').val();
+        if(birthdate1 !== '' ){
+            console.log('birthdate1=' + birthdate1);
+            NewUri.addSearch("birthdate1", birthdate1);
+        }
+        
+        var birthdate2 = $('#birthdate2').val();
+        if(birthdate2 !== '' ){
+            console.log('birthdate2=' + birthdate2);
+            NewUri.addSearch("birthdate2", birthdate2);
+        }
+        
+        var specialization_id = $('#specialization').val();
+        if(zp1 !== '' ){
+            console.log('specialization_id=' + specialization_id);
+            NewUri.addSearch("specialization_id", specialization_id);
+        }
+        
+        console.log('!!!' + window.location.search);
+        
+        setTimeout((newUrl) => {   event.preventDefault();
+
+            $.pjax.reload({
+                container: '#p0',
+                type: 'GET',
+                url: NewUri, //$(this).attr("href"),
+                data: {},
+                push: true,
+                replace: false,
+                timeout: 1000,
+    
+            }); }, 200);
+        
+      
+        console.log('done');
+
+    });
+  
+    $(document).on('submit', 'form#searchform', function(event){
+
+        
+        console.log('event');
+        
+
+     });
+});
+
+$(function(){
+
+    $('body').on('pjax:end','.nselectlist-static', function() {
+        
+       $('.nselectlist-static').nselect();
+   })
+
 
 });

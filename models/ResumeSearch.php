@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Resume;
 
+
 /**
  * ResumeSearch represents the model behind the search form of `\app\models\Resume`.
  */
@@ -40,38 +41,54 @@ class ResumeSearch extends Resume
      */
     public function search($params)
     {
-        $query = Resume::find()->with('specialization')->with('opyts');
+        $query = Resume::find()->where( '1=1')->with('specialization')->with('opyts');
 
-        // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+       // $this->load($params);
+           
+        //if (!$this->validate()) {
 
-        $this->load($params);
+       //      $query->where('0=1');
+           
+      //  }
+        $allowed_strict = ['specialization_id', 'sex', 'city'];
+        $data = array_intersect_key($params, array_flip($allowed_strict));
+        $query->andFilterWhere($data);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+        $allowed_1 = ['zp1'];
+        $data = array_intersect_key($params, array_flip($allowed_1));
+        foreach ($data as $key => $value){
+            $key=substr($key,0,-1);
+            $query->andFilterWhere(['>=',$key,$value]);
+        }
+        $allowed_2 = ['zp2'];
+        $data = array_intersect_key($params, array_flip($allowed_2));
+        foreach ($data as $key => $value){
+            $key=substr($key,0,-1);
+            $query->andFilterWhere(['<=',$key,$value]);
+        }
+        
+        $allowed_age1 = ['birthdate1'];
+        $data = array_intersect_key($params, array_flip($allowed_age1));
+        foreach ($data as $key => $value){
+            $key=substr($key,0,-1);
+            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0, date('m'), date('d'), date('Y')-$value+2),'Y-M-d H:m:s');
+            $query->andFilterWhere(['<=',$key,$birthdate]);
+        }
+        $allowed_age2 = ['birthdate2'];
+        $data = array_intersect_key($params, array_flip($allowed_age2));
+        foreach ($data as $key => $value){
+            $key=substr($key,0,-1); 
+            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0, date('m'), date('d'), date('Y')-$value-1),'Y-M-d H:m:s');
+            $query->andFilterWhere(['>=',$key,$birthdate]);
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'author_id' => $this->author_id,
-            'birthdate' => $this->birthdate,
-            'specialization_id' => $this->specialization_id,
-        ]);
+       
+        
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'middle_name', $this->middle_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'sex', $this->sex])
-            ->andFilterWhere(['like', 'city', $this->city])
-            ->andFilterWhere(['like', 'mail', $this->mail])
-            ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'about', $this->about]);
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
 
         return $dataProvider;
     }

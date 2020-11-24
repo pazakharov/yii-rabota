@@ -1727,9 +1727,9 @@ input[type="file"] {
 }
 
 .rub-icon {
-    position: absolute;
-    top: 15px;
-    right: 12px;
+    position: relative;
+    top: 0px;
+    right: 21px;
 }
 
 .vacancy-filter-btn {
@@ -1808,6 +1808,9 @@ input[type="file"] {
     display: none;
 }
 
+.w116{
+    width:100px;
+}
 .my-vacancies-block .card-ul-radio {
     margin-bottom: 0;
 }

@@ -12,6 +12,7 @@ use yii\helpers\VarDumper;
 use yii\web\UploadedFile;
 use app\models\UploadImage;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 
 /**
  * ResumeController implements the CRUD actions for Resume model.
@@ -42,30 +43,30 @@ class ResumeController extends Controller
      */
     public function actionIndex()
     {
-        // $searchModel = new ResumeSearch();
+        $searchModel = new ResumeSearch();
+
+        $params = Yii::$app->request->queryParams;
        
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        // return $this->render('index_new', [
-
-        //     'searchModel' => $searchModel,
-
-        //     'dataProvider' => $dataProvider,
-
-        // ]);
-      
-        $dataProvider = new ActiveDataProvider([
-            'query' => Resume::find()->with('specialization')->with('opyts'),
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
-
+        $dataProvider = $searchModel->search( $params);
        
+        $query = new Query();
         
-        
+        $cities = $query->select('city')
+                        ->from('resume')
+                        ->GroupBy('city')
+                        ->createCommand()
+                        ->queryColumn();
 
-        return $this->render('index_new', ['dataProvider' => $dataProvider]);
+                        $a = array('green', 'red', 'yellow');
+                        $b = array('avocado', 'apple', 'banana');
+        $cities = array_combine(array_values($cities), array_values($cities));
+
+               //         var_dump($cities);
+
+        return $this->render('index_new', ['dataProvider' => $dataProvider,
+                                           'params' =>  $params,
+                                           'cities' =>$cities
+                                                ]);
 
 
     } 
@@ -73,8 +74,10 @@ class ResumeController extends Controller
     public function actionMyresume()
     {
         $searchModel = new ResumeSearch();
+
+        $params = Yii::$app->request->queryParams;
        
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search($params);
 
         // return $this->render('index_new', [
 

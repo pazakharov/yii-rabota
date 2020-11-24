@@ -1,4 +1,3 @@
-<?php //var_dump($model);die ?>
 <?php $op = $model->getOpyts()->orderBy('id DESC')->limit(1)->one() ;?>
 <div class="vakancy-page-block company-list-search__block resume-list__block p-rel mb16">
     <div class="company-list-search__block-left">
@@ -30,4 +29,3 @@
         </p>
     </div>
 </div>
-<?php //var_dump($op) ?>
