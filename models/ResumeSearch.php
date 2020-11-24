@@ -40,7 +40,7 @@ class ResumeSearch extends Resume
      */
     public function search($params)
     {
-        $query = Resume::find();
+        $query = Resume::find()->with('specialization')->with('opyts');
 
         // add conditions that should always apply here
 

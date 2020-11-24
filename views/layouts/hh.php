@@ -41,7 +41,7 @@ AppAsset::register($this);
                 </div>
                 <ul class="navigation-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?php echo Url::toRoute('resume/index')?>">Все резюме</a>
+                        <a class="nav-link" href="<?=Url::toRoute('resume/index')?>">Все резюме</a>
                     </li>
                    
                    
@@ -55,7 +55,7 @@ AppAsset::register($this);
                     echo '</li> ';
                     }else{
                         ?><li class="nav-item">
-                        <a class="nav-link" href="#">Мои резюме</a>
+                        <a class="nav-link" href="<?=Url::toRoute('resume/myresume')?>">Мои резюме</a>
                         </li> <?php
                        echo '<li class="nav-item">';
                        echo Html::beginForm(['/site/logout'], 'post');
@@ -69,10 +69,10 @@ AppAsset::register($this);
                     <ul class="navigation-menu__mobile-nav">
                         <div class="navigation-menu__mobile-nav-top">
                             <li class="navigation-menu__mobile-nav-item active">
-                                <a class="nav-link" href="#">Резюме</a>
+                                <a class="nav-link" href="<?=Url::toRoute('resume/index')?>">Все резюме</a>
                             </li>
                             <li class="navigation-menu__mobile-nav-item">
-                                <a class="nav-link" href="#">Мои резюме</a>
+                                <a class="nav-link" href="<?=Url::toRoute('resume/myresume')?>">Мои резюме</a>
                             </li>
                         </div>
                     </ul>

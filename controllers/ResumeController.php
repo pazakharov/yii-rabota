@@ -53,9 +53,7 @@ class ResumeController extends Controller
         //     'dataProvider' => $dataProvider,
 
         // ]);
-
       
-
         $dataProvider = new ActiveDataProvider([
             'query' => Resume::find()->with('specialization')->with('opyts'),
             'pagination' => [
@@ -68,6 +66,32 @@ class ResumeController extends Controller
         
 
         return $this->render('index_new', ['dataProvider' => $dataProvider]);
+
+
+    } 
+    
+    public function actionMyresume()
+    {
+        $searchModel = new ResumeSearch();
+       
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // return $this->render('index_new', [
+
+        //     'searchModel' => $searchModel,
+
+        //     'dataProvider' => $dataProvider,
+
+        // ]);
+
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => Resume::find()->with('specialization')->with('opyts'),
+        //     'pagination' => [
+        //         'pageSize' => 20,
+        //     ],
+        // ]);
+
+        return $this->render('my_resume', ['dataProvider' => $dataProvider]);
 
 
     }
@@ -88,7 +112,7 @@ class ResumeController extends Controller
         ]);
     }
 
-    /**
+     /**
      * Creates a new Resume model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
