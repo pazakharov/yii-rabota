@@ -311,36 +311,38 @@ class Resume extends \yii\db\ActiveRecord
        return parent::afterSave($insert, $changedAttributes);
     }
 
-    private function _updateOpyt()
-    {
-        if( count($this->opyt) > 0 )
-        {   
-            Opyt::deleteAll('resume_id = '.$this->id);
+    private function _updateOpyt() {
 
-            foreach($this->opyt as $opyt)
-            {   
-                $opyt['resume_id'] = $this->id;
+        if(isset($this->opyt)) {
+            if(count($this->opyt) > 0) {
+                Opyt::deleteAll('resume_id = '.$this->id);
 
-                $opyt['date1'] =   $opyt['year1'].'-'.$opyt['month1'].'-01 00:00:00';  
-                
-                if(isset($opyt['present_check'])){
+                foreach($this->opyt as $opyt) {
+                    $opyt['resume_id']=$this->id;
 
-                    $opyt['date2'] = '0000-00-01 00:00:00'  ;
+                    $opyt['date1']=$opyt['year1'].'-'.$opyt['month1'].'-01 00:00:00';
 
-                }else{
-                    $opyt['date2'] =  $opyt['year2'].'-'.$opyt['month2'].'-01 00:00:00';  
-                } 
-                
-                $Opyt_model = new Opyt();
-                
-                $Opyt_model->attributes = $opyt;
+                    if(isset($opyt['present_check'])) {
 
-                $Opyt_model->save();               
-                
+                        $opyt['date2']='0000-00-01 00:00:00';
+
+                    }
+
+                    else {
+                        $opyt['date2']=$opyt['year2'].'-'.$opyt['month2'].'-01 00:00:00';
+                    }
+
+                    $Opyt_model=new Opyt();
+
+                    $Opyt_model->attributes=$opyt;
+
+                    $Opyt_model->save();
+
+                }
+
             }
+        }
 
-        }    
-        
     }
 
 

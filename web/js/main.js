@@ -162,16 +162,15 @@ $(function () {
 
 });
 
+
 $(function () {
-     
-    $(document).on('change', '#searchform', function (event) {
 
-        // $(this).closest('form').submit( function(e){
-
-        //     jQuery.pjax.submit(e, '#p0');
-
-        // });
-
+   
+});
+    
+$(function () {
+    function updatelist() {
+        
         var NewUri = new URI("?r=resume/index");
         
         let searchParams = new URLSearchParams(window.location.search)
@@ -218,13 +217,17 @@ $(function () {
             console.log('specialization_id=' + specialization_id);
             NewUri.addSearch("specialization_id", specialization_id);
         }
+
+        $('#opyt_dev input:checked').each(function() {
+           
+            NewUri.addSearch("opyt_dev[]", $(this).val());
+            console.log($(this).val());
+        });
         
-        console.log('!!!' + window.location.search);
-        
-        setTimeout((newUrl) => {   event.preventDefault();
+        setTimeout((NewUri) => {
 
             $.pjax.reload({
-                container: '#p0',
+                container: '#content',
                 type: 'GET',
                 url: NewUri, //$(this).attr("href"),
                 data: {},
@@ -232,13 +235,36 @@ $(function () {
                 replace: false,
                 timeout: 1000,
     
-            }); }, 200);
-        
-      
-        console.log('done');
+            });
+        }, 200);
 
-    });
+
+        console.log('done');
+    }
+
+
+
+
+
+    $('.nselectlist-form').nSelect(
+        {afterChange: function(){
+
+            updatelist();
+
+        }
+    })
+
+
+    $(document).on('change', '#searchform', function (event) {
+
+        updatelist();
+ 
+     });  
+});
   
+$(function () {
+     
+   
    
 });
 
@@ -246,7 +272,7 @@ $(function () {
 $(document).on('pjax:end', function(){
 
         
-    $(this).find('.nselectlist-static').nselect();
+  //  $(this).find('').nselect();
     
 
  });

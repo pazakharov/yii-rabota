@@ -163,14 +163,19 @@ class ResumeController extends Controller
         $model = $this->findModel($id);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save() ) {
            
-            
+           
             return $this->redirect(['view', 'id' => $model->id]);
       
         }
             
-           // var_dump($model); die;  
+         foreach ($model->getErrors() as $key => $value) {
+            Yii::$app->session->setFlash('error', $key.': '.$value[0]);            
+          }
+           
+           
+            //var_dump($model); die;  
             return $this->render('update', [
             
              

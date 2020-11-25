@@ -5,7 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Resume;
-
+use yii\db\Query;
 
 /**
  * ResumeSearch represents the model behind the search form of `\app\models\Resume`.
@@ -56,6 +56,68 @@ class ResumeSearch extends Resume
         $allowed_strict = ['specialization_id', 'sex', 'city'];
         $data = array_intersect_key($params, array_flip($allowed_strict));
         $query->andFilterWhere($data);
+        
+        
+        
+        $allowed_strict = ['opyt_dev'];
+        $data = array_intersect_key($params, array_flip($allowed_strict));
+        
+        foreach ($data as $opyt){
+        
+            foreach ($opyt as $key => $value){
+            
+             switch($value){
+              
+              
+                case 1: 
+
+                        $userQuery1 = (new Query())->select('resume_id')
+                                                    ->from('opyt')
+                                                    ->groupBy('resume_id');
+                                                    
+                            $query->orFilterWhere(['not in', 'id' , $userQuery1]);
+                break;
+                case 2: 
+
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
+                                                    ->from('opyt')
+                                                    ->groupBy('resume_id')
+                                                    ->Having( 'opyt >= 1 AND opyt <= 3');
+
+                        $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
+
+                            $query->orFilterWhere([ 'id' => $userQuery2]);
+                break;            
+                case 3: 
+
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
+                                                    ->from('opyt')
+                                                    ->groupBy('resume_id')
+                                                    ->Having( 'opyt >= 3 AND opyt <= 6');
+
+                        $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
+
+                            $query->OrFilterWhere(['id' => $userQuery2]);
+                break;
+                case 4: 
+
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
+                                                    ->from('opyt')
+                                                    ->groupBy('resume_id')
+                                                    ->Having( 'opyt > 6 ');
+
+                        $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
+
+                            $query->orFilterWhere(['id' => $userQuery2]);
+                        break;
+
+              }
+        }
+    }
+        
+            
+
+
 
         $allowed_1 = ['zp1'];
         $data = array_intersect_key($params, array_flip($allowed_1));
