@@ -70,7 +70,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
                 <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input',
-                                                                'value' => \DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y')
+                                                                'value' => strpos($model->birthdate,'-')?\DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y'):$model->birthdate
                                                                 ]
                 )->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">

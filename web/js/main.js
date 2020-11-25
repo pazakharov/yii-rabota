@@ -22,9 +22,8 @@ $(function () {
 
 $(function () {
     $('.nselectlist-static').nSelect();
-    $('#no-filter').editableSelect({
-        filter: false
-    });
+
+    
     $('.dpicker').datepicker({
         language: "ru",
         todayHighlight: true
@@ -128,6 +127,7 @@ $(function () {
         $('#exp_div .mesto:last').html($('#exp_div .mesto:last').html().replace(/iteration/g, index));
          
        
+        console.log($('#exp_div .mesto:last .nselectlist'));
         $('#exp_div .mesto:last .nselectlist').nselect();
         
 
@@ -239,21 +239,14 @@ $(function () {
 
     });
   
-    $(document).on('submit', 'form#searchform', function(event){
-
-        
-        console.log('event');
-        
-
-     });
+   
 });
 
-$(function(){
 
-    $('body').on('pjax:end','.nselectlist-static', function() {
+$(document).on('pjax:end', function(){
+
         
-       $('.nselectlist-static').nselect();
-   })
+    $(this).find('.nselectlist-static').nselect();
+    
 
-
-});
+ });

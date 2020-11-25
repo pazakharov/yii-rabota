@@ -84,7 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="vakancy-page-filter-block__row mb24">
                         <div class="paragraph cadet-blue">Город</div>
                         <div class="citizenship-select">
-                       <?//=$params['city']?> <? //var_dump($cities)?>
                         <?= Html::dropDownList('city', isset($params['city'])?$params['city']:'' , $cities,['class' => 'nselectlist-static formelement','id'=>'citylist', 'prompt' => '']) ?>
                         </div>
                     </div>

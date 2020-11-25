@@ -61,7 +61,6 @@ class ResumeController extends Controller
                         $b = array('avocado', 'apple', 'banana');
         $cities = array_combine(array_values($cities), array_values($cities));
 
-               //         var_dump($cities);
 
         return $this->render('index_new', ['dataProvider' => $dataProvider,
                                            'params' =>  $params,

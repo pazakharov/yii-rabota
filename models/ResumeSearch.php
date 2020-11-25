@@ -51,6 +51,8 @@ class ResumeSearch extends Resume
        //      $query->where('0=1');
            
       //  }
+        
+
         $allowed_strict = ['specialization_id', 'sex', 'city'];
         $data = array_intersect_key($params, array_flip($allowed_strict));
         $query->andFilterWhere($data);
@@ -72,14 +74,17 @@ class ResumeSearch extends Resume
         $data = array_intersect_key($params, array_flip($allowed_age1));
         foreach ($data as $key => $value){
             $key=substr($key,0,-1);
-            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0, date('m'), date('d'), date('Y')-$value+2),'Y-M-d H:m:s');
+            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0, '1', '1', date('Y')-(int)$value+1),'Y-M-d H:m:s');
             $query->andFilterWhere(['<=',$key,$birthdate]);
         }
         $allowed_age2 = ['birthdate2'];
         $data = array_intersect_key($params, array_flip($allowed_age2));
         foreach ($data as $key => $value){
-            $key=substr($key,0,-1); 
-            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0, date('m'), date('d'), date('Y')-$value-1),'Y-M-d H:m:s');
+            $key=substr($key,0,-1);
+           
+            ((int)$value == 0)?$value = 200:'';
+            $birthdate = \Yii::$app->formatter->asDateTime(mktime(0, 0, 0,1,1, date('Y')-$value),'Y-M-d H:m:s');
+           
             $query->andFilterWhere(['>=',$key,$birthdate]);
         }
 

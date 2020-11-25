@@ -58,7 +58,7 @@ class Resume extends \yii\db\ActiveRecord
             [['GrafikArray','ZArray','author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id','zp'], 'required'],
             [['author_id', 'specialization_id','zp','created_at', 'updated_at'], 'integer'],
             [['birthdate'], 'safe'],
-            [['GrafikArray','ZArray','opyt'], 'safe'],
+            [['GrafikArray','ZArray','opyt','opyt_check'], 'safe'],
             [['about'], 'string'],
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
@@ -233,7 +233,14 @@ class Resume extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOpyt_check()
+    public function setOpyt_check(){
+
+        $this->opyt = $this->opyt_check;
+
+    }
+
+    
+     public function getOpyt_check()
     {
        
         if( $this->getOpyts()->count() > 0){
@@ -243,6 +250,18 @@ class Resume extends \yii\db\ActiveRecord
 
             return null;
         }
+
+    }
+    
+    public function getStag()
+    {
+       
+       $stag = $this->getOpyts()->select('FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1)))')->scalar();
+
+            
+       return str_replace(0,'',substr($stag,0,4)). ' ' .$this->_decline(substr($stag,2,2) , ['год', 'года', 'лет']); 
+    
+
 
     }
 
