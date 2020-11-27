@@ -8,6 +8,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'defaultRoute' => 'resume/index',
     'layout' => '@app/views/layouts/hh',
+    'language' => 'ru',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

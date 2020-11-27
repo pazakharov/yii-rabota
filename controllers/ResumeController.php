@@ -32,16 +32,16 @@ class ResumeController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-              
+
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['login', 'signup', 'index','view'],
+                        'actions' => ['login', 'signup', 'index', 'view'],
                         'roles' => ['?'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout','myresume','update','create','delete','index','view','upload'],
+                        'actions' => ['logout', 'myresume', 'update', 'create', 'delete', 'index', 'view', 'upload'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -61,40 +61,37 @@ class ResumeController extends Controller
         $searchModel = new ResumeSearch();
 
         $params = Yii::$app->request->queryParams;
-       
-        $dataProvider = $searchModel->search( $params);
-       
-        $query = new Query();
-        
-        $cities = $query->select('city')
-                        ->from('resume')
-                        ->GroupBy('city')
-                        ->createCommand()
-                        ->queryColumn();
 
-                        $a = array('green', 'red', 'yellow');
-                        $b = array('avocado', 'apple', 'banana');
+        $dataProvider = $searchModel->search($params);
+
+        $query = new Query();
+
+        $cities = $query->select('city')
+            ->from('resume')
+            ->GroupBy('city')
+            ->createCommand()
+            ->queryColumn();
+
         $cities = array_combine(array_values($cities), array_values($cities));
 
+        return $this->render('index_new', [
+            'dataProvider' => $dataProvider,
+            'params' =>  $params,
+            'cities' => $cities
+        ]);
+    }
 
-        return $this->render('index_new', ['dataProvider' => $dataProvider,
-                                           'params' =>  $params,
-                                           'cities' =>$cities
-                                                ]);
-
-
-    } 
-    
+    /**
+     * @return mixed
+     * 
+     */
     public function actionMyresume()
     {
         $searchModel = new ResumeSearch();
 
-        $dataProvider = $searchModel->search(['author_id' => Yii::$app->user->id ]);
-     
+        $dataProvider = $searchModel->search(['author_id' => Yii::$app->user->id]);
 
         return $this->render('my_resume', ['dataProvider' => $dataProvider]);
-
-
     }
 
     /**
@@ -103,8 +100,8 @@ class ResumeController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    
-     public function actionView($id)
+
+    public function actionView($id)
     {
         return $this->render('view', [
 
@@ -113,7 +110,7 @@ class ResumeController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Creates a new Resume model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -121,29 +118,30 @@ class ResumeController extends Controller
     public function actionCreate()
     {
         $resume = new Resume();
-        
+
         $image = new UploadImage();
 
-        
-        
-        $resume->load(Yii::$app->request->post());
-       
-               
-        if ($resume->save()) {
-          
-            return $this->redirect(['view', 'id' => $resume->id]);
 
-        }else{
-            
-            
+        $resume->load(Yii::$app->request->post());
+
+
+        if ($resume->save()) {
+
+            return $this->redirect(['view', 'id' => $resume->id]);
+        } else {
+
+            foreach ($resume->getErrors() as $key => $value) {
+                Yii::$app->session->addFlash('error', $value[0]);
+            }
+
             $resume->foto = "uploads/noavatar.png";
             $resume->birthdate = date('Y-m-d');
 
             return $this->render('create', [
 
-            'model' => $resume,
-            
-            'model2' => $image,
+                'model' => $resume,
+
+                'model2' => $image,
             ]);
         }
     }
@@ -156,25 +154,24 @@ class ResumeController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
-    {   
+    {
         $image = new UploadImage();
-       
+
         $model = $this->findModel($id);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->save() ) {
-           
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
             return $this->redirect(['view', 'id' => $model->id]);
-      
         }
-            
-         foreach ($model->getErrors() as $key => $value) {
-            Yii::$app->session->setFlash('error', $key.': '.$value[0]);            
-          }
-            return $this->render('update', [
+
+        foreach ($model->getErrors() as $key => $value) {
+            Yii::$app->session->addFlash('error', $value[0]);
+        }
+        return $this->render('update', [
             'model' => $model,
             'model2' => $image,
-         ]);
+        ]);
     }
 
     /**
@@ -190,7 +187,7 @@ class ResumeController extends Controller
 
         return $this->redirect(['index']);
     }
-/**
+    /**
      * Upload foto for resume.
      * If Upload is successful, the browser will resive response.
      * @param integer $id
@@ -199,28 +196,24 @@ class ResumeController extends Controller
      */
     public function actionUpload()
     {
-        
-        
+
+
         if (Yii::$app->request->isPost) {
 
             $imageModel = new UploadImage();
 
-               
 
-            $imageModel->imageFile = UploadedFile::getInstance($imageModel,"imageFile");
-            
+
+            $imageModel->imageFile = UploadedFile::getInstance($imageModel, "imageFile");
+
             if (Yii::$app->request->isPost) {
-                
+
                 return $imageModel->upload();
-            
-            }else{
-              
+            } else {
+
                 return "uploads/noavatar.png";
-            
             }
         }
-
-        
     }
 
 
