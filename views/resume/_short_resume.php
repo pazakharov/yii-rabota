@@ -1,8 +1,6 @@
 <?php
 use yii\helpers\Url;
 ?>
-<?php $op = $model->getOpyts()->orderBy('id DESC')->limit(1)->one() ;?>
-<a class="nav-link" href="<?=Url::toRoute(['resume/view', 'id' => $model->id])?>">
 <div class="vakancy-page-block company-list-search__block resume-list__block p-rel mb16">
     <div class="company-list-search__block-left">
         <div class="resume-list__block-img mb8">
@@ -15,23 +13,24 @@ use yii\helpers\Url;
         <h3 class="mini-title mobile-off"><?=$model->specialization->name?></h3>
         <div class="d-flex align-items-center flex-wrap mb8 ">
             <span class="mr16 paragraph"><?=$model->zp?> ₽</span>
-            <span class="mr16 paragraph"><?=(isset($op->position))?'Опыт работы '.$model->stag:'Без опыта'?></span>
+            <span class="mr16 paragraph"><?=(isset($model->lastopyt->position))?'Опыт работы '.$model->stag:'Без опыта'?></span>
             <span class="mr16 paragraph"><b><?=$model->age?></b></span>
             <span class="mr16 paragraph"><?=$model->city?></span>
         </div>
         <p class="paragraph tbold">
-        <?php if(isset($op->position)){
+        <?php if(isset($model->lastopyt->position)){
             echo 'Последнее место работы';}?>
         </p>
     </div>
     <div class="company-list-search__block-middle">
        
         <p class="paragraph mb16 mobile-mb32">
-            <?php if(isset($op->position)){echo $op->position;} ?>
-            <?php if(isset($op->organization)){echo ' в "'.$op->organization.'"';} ?>
-            <?php if(isset($op->year1)){echo Yii::$app->formatter->asDate('01-'.$op->month1.'-'.$op->year1,"LLLL YYYY").' -';} ?>
-            <?php if(isset($op->year1)){echo Yii::$app->formatter->asDate('01-'.$op->month2.'-'.$op->year2,"LLLL YYYY");} ?>
+            <?php if(isset($model->lastopyt->position)){echo $model->lastopyt->position;} ?>
+            <?php if(isset($model->lastopyt->organization)){echo ' в "'.$model->lastopyt->organization.'"';} ?>
+            <?php if(isset($model->lastopyt->year1)){echo Yii::$app->formatter->asDate('01-'.$model->lastopyt->month1.'-'.$model->lastopyt->year1,"LLLL YYYY").' -';} ?>
+            <?php if(isset($model->lastopyt->year1)){echo Yii::$app->formatter->asDate('01-'.$model->lastopyt->month2.'-'.$model->lastopyt->year2,"LLLL YYYY");} ?>
+            <a class="nav-link" href="<?=Url::toRoute(['resume/view', 'id' => $model->id])?>">Подробнее</a>
         </p>
+        
     </div>
 </div>
-</a>

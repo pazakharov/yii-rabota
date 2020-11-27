@@ -1,3 +1,4 @@
+
 <?php
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -19,6 +20,15 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
+         
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\PjaxAsset' => [
+                    'sourcePath' => null,
+                    'js'=> []
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'app\models\User',

@@ -40,11 +40,9 @@ AppAsset::register($this);
                 <div class="header__login header__login-mobile">
                 </div>
                 <ul class="navigation-nav">
-                    <li class="nav-item active">
+                    <li class="nav-item ">
                         <a class="nav-link" href="<?=Url::toRoute('resume/index')?>">Все резюме</a>
                     </li>
-                   
-                   
                     <?php 
                     if(Yii::$app->user->isGuest){
                     echo '<li class="nav-item">';

@@ -125,11 +125,9 @@ $(function () {
         $($($($('#stamp').html()).hide()).appendTo('#exp_div')).slideDown('2000'); 
        
         $('#exp_div .mesto:last').html($('#exp_div .mesto:last').html().replace(/iteration/g, index));
-         
-       
+                 
+       // $('#exp_div .mesto:last .nselectlist').nselect();
         console.log($('#exp_div .mesto:last .nselectlist'));
-        $('#exp_div .mesto:last .nselectlist').nselect();
-        
 
     }); 
     
@@ -169,6 +167,7 @@ $(function () {
 });
     
 $(function () {
+
     function updatelist() {
         
         var NewUri = new URI("?r=resume/index");
@@ -213,7 +212,7 @@ $(function () {
         }
         
         var specialization_id = $('#specialization').val();
-        if(zp1 !== '' ){
+        if(specialization_id !== '' ){
             console.log('specialization_id=' + specialization_id);
             NewUri.addSearch("specialization_id", specialization_id);
         }
@@ -223,21 +222,50 @@ $(function () {
             NewUri.addSearch("opyt_dev[]", $(this).val());
             console.log($(this).val());
         });
+
+        $('#zanyatost input:checked').each(function() {
+           
+            NewUri.addSearch("zanyatosts[]", $(this).val());
+            console.log($(this).val());
+        });
+
+        $('#grafik input:checked').each(function() {
+           
+            NewUri.addSearch("grafiks[]", $(this).val());
+            console.log($(this).val());
+        });
         
-        setTimeout((NewUri) => {
+        
+        console.log('NewUri=' + NewUri);
+
+       
+            
+           
 
             $.pjax.reload({
-                container: '#content',
+                container: '#content_pjax',
                 type: 'GET',
-                url: NewUri, //$(this).attr("href"),
+                url: NewUri, 
                 data: {},
                 push: true,
                 replace: false,
                 timeout: 1000,
     
-            });
-        }, 200);
+            }).done(function(){
 
+                            $.pjax.reload({
+                                container: '#links_pjax',
+                                type: 'GET',
+                                url: NewUri, 
+                                data: {},
+                                push: true,
+                                replace: false,
+                                timeout: 1000,
+                    
+                            });
+            }
+                    
+            );
 
         console.log('done');
     }
@@ -260,19 +288,15 @@ $(function () {
         updatelist();
  
      });  
+
+
+     $(document).on("pjax:success", "#links_pjax",  function(event){
+        $.pjax.reload({container:"#content_pjax",timeout:3000})
+      }
+    );
+
 });
   
-$(function () {
-     
-   
-   
-});
 
 
-$(document).on('pjax:end', function(){
 
-        
-  //  $(this).find('').nselect();
-    
-
- });

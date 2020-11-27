@@ -13,7 +13,7 @@
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
-                            <?= $form->field($rabota, 'month1')->dropDownList([              '1' => "Январь",
+                            <?= $form->field($rabota, 'month1')->dropDownList([         '1' => "Январь",
                                                                                         '2' => "Февраль",
                                                                                         '3' => "Март",
                                                                                         '4' => "Апрель",
@@ -26,7 +26,7 @@
                                                                                         '11' => "Ноябрь",
                                                                                         '12' => "Декабрь"],
                                                                                         
-                                                                            ['prompt'=>'месяц..','class' => 'nselectlist-static','name' => 'Resume[opyt]['.$index.'][month1]'])
+                                                                            ['id'=>'opyt-month1'.$index, 'prompt'=>'месяц..','class' => 'nselectlist-static','name' => 'Resume[opyt]['.$index.'][month1]'])
                                                             ->label(false); ?>
 
 
@@ -34,7 +34,8 @@
                         <div class="citizenship-select w100">
                             <?= $form->field($rabota, 'year1')->textInput(['class' => 'dor-input w100',
                                                             'placeholder' => "2000",
-                                                            'name' => 'Resume[opyt]['.$index.'][year1]' 
+                                                            'name' => 'Resume[opyt]['.$index.'][year1]' ,
+                                                            'id'=>'opyt-year1'.$index,
                                                             ])->label(false) ?>
 
                         </div>
@@ -61,7 +62,7 @@
                                                                                         '11' => "Ноябрь",
                                                                                         '12' => "Декабрь"],
                                                                                         
-                                                                            ['prompt'=>'месяц..','class' => 'nselectlist-static','name' => 'Resume[opyt]['.$index.'][month2]'])
+                                                                            ['id'=>'opyt-month2'.$index,'prompt'=>'месяц..','class' => 'nselectlist-static','name' => 'Resume[opyt]['.$index.'][month2]'])
                                                             ->label(false); ?>
 
 
@@ -69,7 +70,8 @@
                         <div class="citizenship-select w100">
                             <?= $form->field($rabota, 'year2')->textInput(['class' => 'dor-input w100',
                                                             'placeholder' => "2000",
-                                                            'name' => 'Resume[opyt]['.$index.'][year2]' 
+                                                            'name' => 'Resume[opyt]['.$index.'][year2]',
+                                                            'id'=>'opyt-year2'.$index, 
                                                             ])->label(false) ?>
 
                         </div>
@@ -99,6 +101,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
                     <?= $form->field($rabota, 'organization')->textInput(['class' => 'dor-input w100',
+                                                            'id'=>'opyt-org'.$index,
                                                             'placeholder' => "Организация",
                                                             'name' => 'Resume[opyt]['.$index.'][organization]' 
                                                             ])->label(false) ?>
@@ -110,6 +113,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
                     <?= $form->field($rabota, 'position')->textInput(['class' => 'dor-input w100',
+                                                         'id'=>'opyt-pos'.$index,
                                                             'placeholder' => "Должность",
                                                             'name' => 'Resume[opyt]['.$index.'][position]' 
                                                             ])->label(false) ?>

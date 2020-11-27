@@ -44,7 +44,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
 
-            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
+            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100' ])->label(false) ;?>
         </div>
     </div>
     <div class="row mb16">
@@ -150,9 +150,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="citizenship-select">
-                <?= $form->field($model, 'specialization_id')->dropDownList(Specializations::find()
-                                                         ->Select(['name','id'])->indexBy('id')
-                                                         ->column(),['prompt'=>'Выберете специализацию..','class' => 'nselectlist-static'])->label(false) ?>
+                <?= $form->field($model, 'specialization_id')->dropDownList($model->getAvailibleSpecializations(),['prompt'=>'Выберете специализацию..','class' => 'nselectlist-static'])->label(false) ?>
 
 
 
@@ -165,12 +163,12 @@ use yii\helpers\Url;
             <div class="paragraph">Зарплата</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="p-rel">
+            <div class="p-rel"> <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
                 <?= $form->field($model, 'zp')->textInput(['class' => 'dor-input w100',
                                                             'placeholder' => "От" 
                                                             ])->label(false) ?>
 
-                <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
+               
             </div>
         </div>
     </div>
@@ -181,10 +179,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model,'ZArray')->checkboxList(Zanaytost::find()
-                                                            ->select(['name','id'])
-                                                            ->indexBy('id')
-                                                            ->column(),[
+                <?= $form->field($model,'ZArray')->checkboxList($model->getAvailibleZanyatost(),[
                                                                 'item'=>function ($index, $label, $name, $checked, $value){
                                                                     $ch = '';
                                                                     if($checked == 1) {$ch = 'checked';}
@@ -211,10 +206,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model,'GrafikArray')->checkboxList(Grafik::find()
-                                                            ->select(['name','id'])
-                                                            ->indexBy('id')
-                                                            ->column(),[
+                <?= $form->field($model,'GrafikArray')->checkboxList($model->getAvailibleGrafiks(),[
                                                                 'item'=>function ($index, $label, $name, $checked, $value){
                                                                     $ch = '';
                                                                     if($checked == 1) {$ch = 'checked';}

@@ -1834,13 +1834,13 @@ input[type="file"] {
 
 /* PAGINATION STYLES */
 
-.dor-pagination {
+.pagination{
     display: flex;
     flex-wrap: wrap;
     padding-left: 0;
 }
 
-.dor-pagination li {
+.pagination li {
     width: 32px;
     height: 32px;
     list-style-type: none;
@@ -1852,23 +1852,23 @@ input[type="file"] {
     margin-right: 4px;
 }
 
-.dor-pagination li.active {
+.pagination li.active {
     background: #6f43d6;
 }
 
-.dor-pagination li.active a {
+.pagination li.active a {
     color: #FFFFFF;
 }
 
-.dor-pagination li.active:hover {
+.pagination li.active:hover {
     background: #3a66ba;
 }
 
-.dor-pagination li:hover {
+.pagination li:hover {
     background: #F3F3F3;
 }
 
-.dor-pagination li a {
+.pagination li a {
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -1879,29 +1879,29 @@ input[type="file"] {
     text-align: center;
 }
 
-.page-link-next {
+.next {
     width: unset !important;
     border-radius: unset !important;
     margin-left: 16px;
     white-space: nowrap;
 }
 
-.page-link-prev {
+.prev {
     width: unset !important;
     border-radius: unset !important;
     margin-right: 16px !important;
     white-space: nowrap;
 }
 
-.page-link-next a,
-.page-link-prev a {
+.next a,
+.prev a {
     color: #3a66ba !important;
 }
 
-.page-link-next:hover,
-.page-link-next a:hover,
-.page-link-prev:hover,
-.page-link-prev a:hover {
+.next:hover,
+.next a:hover,
+.prev:hover,
+.prev a:hover {
     background: transparent !important;
 }
 

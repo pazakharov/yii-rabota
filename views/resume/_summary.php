@@ -1,3 +1,6 @@
+<?php use yii\helpers\Url;
+?>
+
 <div class="d-flex align-items-center flex-wrap mb8">
     <span class="paragraph mr16">{summary}</span>
     <div class="vakancy-page-header-dropdowns">
@@ -15,9 +18,8 @@
                 <i class="fas fa-angle-down arrowDown"></i>
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">По новизне</a>
-                <a class="dropdown-item" href="#">По возрастанию зарплаты</a>
-                <a class="dropdown-item" href="#">По убыванию зарплаты</a>
+                <a class="dropdown-item" href="<?= Url::current(['sort' => 'updated_at']) ?>">Новизне</a>
+                <a class="dropdown-item" href="<?= Url::current(['sort' => 'zp']) ?>">Зарплате </a>
             </div>
         </div>
     </div>

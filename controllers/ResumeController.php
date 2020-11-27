@@ -3,16 +3,15 @@
 namespace app\controllers;
 
 use Yii;
+use yii\db\Query;
 use app\models\Resume;
-use app\models\ResumeSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\VarDumper;
 use yii\web\UploadedFile;
 use app\models\UploadImage;
-use yii\data\ActiveDataProvider;
-use yii\db\Query;
+use yii\filters\VerbFilter;
+use app\models\ResumeSearch;
+use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
 
 /**
  * ResumeController implements the CRUD actions for Resume model.
@@ -29,6 +28,22 @@ class ResumeController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+              
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login', 'signup', 'index','view'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout','myresume','update','create','delete','index','view','upload'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -74,24 +89,8 @@ class ResumeController extends Controller
     {
         $searchModel = new ResumeSearch();
 
-        $params = Yii::$app->request->queryParams;
-       
-        $dataProvider = $searchModel->search($params);
-
-        // return $this->render('index_new', [
-
-        //     'searchModel' => $searchModel,
-
-        //     'dataProvider' => $dataProvider,
-
-        // ]);
-
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => Resume::find()->with('specialization')->with('opyts'),
-        //     'pagination' => [
-        //         'pageSize' => 20,
-        //     ],
-        // ]);
+        $dataProvider = $searchModel->search(['author_id' => Yii::$app->user->id ]);
+     
 
         return $this->render('my_resume', ['dataProvider' => $dataProvider]);
 
@@ -165,7 +164,6 @@ class ResumeController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save() ) {
            
-           
             return $this->redirect(['view', 'id' => $model->id]);
       
         }
@@ -173,19 +171,9 @@ class ResumeController extends Controller
          foreach ($model->getErrors() as $key => $value) {
             Yii::$app->session->setFlash('error', $key.': '.$value[0]);            
           }
-           
-           
-            //var_dump($model); die;  
             return $this->render('update', [
-            
-             
-
             'model' => $model,
-            
             'model2' => $image,
-
-
-      
          ]);
     }
 
@@ -198,7 +186,7 @@ class ResumeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel(['id' => $id, 'author_id' => Yii::$app->user->id])->delete();
 
         return $this->redirect(['index']);
     }
