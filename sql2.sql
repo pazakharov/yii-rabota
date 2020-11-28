@@ -12,24 +12,24 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица yii2rabota.grafik
-DROP TABLE IF EXISTS `grafik`;
-CREATE TABLE IF NOT EXISTS `grafik` (
+-- Дамп структуры для таблица yii2rabota.schedule
+DROP TABLE IF EXISTS `schedule`;
+CREATE TABLE IF NOT EXISTS `schedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii2rabota.grafik: ~5 rows (приблизительно)
-/*!40000 ALTER TABLE `grafik` DISABLE KEYS */;
-REPLACE INTO `grafik` (`id`, `name`) VALUES
+-- Дамп данных таблицы yii2rabota.schedule: ~5 rows (приблизительно)
+/*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+REPLACE INTO `schedule` (`id`, `name`) VALUES
 	(1, 'Полный день'),
 	(2, 'Сменный график'),
 	(3, 'Гибкий график'),
 	(4, 'Удалённая работа'),
 	(5, 'Вахтовый метод'),
 	(6, 'По часу вечерами');
-/*!40000 ALTER TABLE `grafik` ENABLE KEYS */;
+/*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii2rabota.migration
 DROP TABLE IF EXISTS `migration`;
@@ -46,9 +46,9 @@ REPLACE INTO `migration` (`version`, `apply_time`) VALUES
 	('m201120_133356_create_user_table', 1605879402);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 
--- Дамп структуры для таблица yii2rabota.opyt
-DROP TABLE IF EXISTS `opyt`;
-CREATE TABLE IF NOT EXISTS `opyt` (
+-- Дамп структуры для таблица yii2rabota.experience
+DROP TABLE IF EXISTS `experience`;
+CREATE TABLE IF NOT EXISTS `experience` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
   `date1` date NOT NULL,
@@ -62,12 +62,12 @@ CREATE TABLE IF NOT EXISTS `opyt` (
   `year2` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  CONSTRAINT `FK_opyt_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
+  CONSTRAINT `FK_experience_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii2rabota.opyt: ~13 rows (приблизительно)
-/*!40000 ALTER TABLE `opyt` DISABLE KEYS */;
-REPLACE INTO `opyt` (`id`, `resume_id`, `date1`, `date2`, `organization`, `position`, `duties`, `month1`, `year1`, `month2`, `year2`) VALUES
+-- Дамп данных таблицы yii2rabota.experience: ~13 rows (приблизительно)
+/*!40000 ALTER TABLE `experience` DISABLE KEYS */;
+REPLACE INTO `experience` (`id`, `resume_id`, `date1`, `date2`, `organization`, `position`, `duties`, `month1`, `year1`, `month2`, `year2`) VALUES
 	(20, 2, '2003-02-01', '2009-03-01', 'ООО Бунгалопешт', 'фракер', 'Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности требуют от нас анализа соответствующий условий активизации. С другой стороны реализация намеченных плановых заданий позволяет оценить значение дальнейших направлений развития. Идейные соображения высшего порядка, а также дальнейшее развитие различных форм деятельности позволяет оценить значение форм развития. С другой стороны постоянный количественный рост и сфера нашей активности требуют от нас анализа модели развития. Идейные соображения высшего порядка, а также сложившаяся структура организации способствует подготовки и реализации соответствующий условий активизации. Равным образом новая модель организационной деятельности позволяет выполнять важные задания по разработке систем массового участия.', 1, 2003, 3, 2009),
 	(21, 5, '2009-04-01', '2020-07-01', 'ООО ГазпромНефть', 'Собиратель бутылок', 'Бутылировал Воду, для офисных крыс', 4, 2009, 7, 2020),
 	(31, 11, '2008-02-01', '2009-04-01', 'КГБ', 'Женщина на проходной', 'Повседневная практика показывает, что постоянное информационно-пропагандистское обеспечение нашей деятельности требуют от нас анализа соответствующий условий активизации. С другой стороны реализация намеченных плановых заданий позволяет оценить значение дальнейших направлений развития. Идейные соображения высшего порядка, а также дальнейшее развитие различных форм деятельности позволяет оценить значение форм развития. С другой стороны постоянный количественный рост и сфера нашей активности требуют от нас анализа модели развития. Идейные соображения высшего порядка, а также сложившаяся структура организации способствует подготовки и реализации соответствующий условий активизации. Равным образом новая модель организационной деятельности позволяет выполнять важные задания по разработке систем массового участия.', 2, 2008, 4, 2009),
@@ -81,7 +81,7 @@ REPLACE INTO `opyt` (`id`, `resume_id`, `date1`, `date2`, `organization`, `posit
 	(66, 14, '2003-02-01', '2009-04-01', 'Бунгалопешт', 'подстилка', '', 2, 2003, 4, 2009),
 	(69, 13, '2008-04-01', '2003-03-01', 'Свойская организация', 'Секретарша', 'Ой, все...', 4, 2008, 3, 2003),
 	(70, 13, '2003-01-01', '2001-06-01', 'Магазин "Косынка"', 'Продавщица', 'Продавала капусту', 1, 2003, 6, 2001);
-/*!40000 ALTER TABLE `opyt` ENABLE KEYS */;
+/*!40000 ALTER TABLE `experience` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii2rabota.resume
 DROP TABLE IF EXISTS `resume`;
@@ -128,22 +128,22 @@ REPLACE INTO `resume` (`id`, `author_id`, `first_name`, `middle_name`, `last_nam
 	(14, 1, 'Надежда', 'Валентиновна', 'Дурова', '2000-11-17', '2', 'Москва', 'jo22ra@sdf.df', '+79149406648', 19, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget.', '\r\nuploads/cff5711bacc771ac0eeb871878426efe.jpg', 16500, 1606407413, 1606407540);
 /*!40000 ALTER TABLE `resume` ENABLE KEYS */;
 
--- Дамп структуры для таблица yii2rabota.resumegrafik
-DROP TABLE IF EXISTS `resumegrafik`;
-CREATE TABLE IF NOT EXISTS `resumegrafik` (
+-- Дамп структуры для таблица yii2rabota.resumeschedule
+DROP TABLE IF EXISTS `resumeschedule`;
+CREATE TABLE IF NOT EXISTS `resumeschedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
-  `grafik_id` int(11) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  KEY `grafik_id` (`grafik_id`),
-  CONSTRAINT `FK_resumegrafik_grafik` FOREIGN KEY (`grafik_id`) REFERENCES `grafik` (`id`),
-  CONSTRAINT `FK_resumegrafik_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
+  KEY `schedule_id` (`schedule_id`),
+  CONSTRAINT `FK_resumeschedule_schedule` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`id`),
+  CONSTRAINT `FK_resumeschedule_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=442 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii2rabota.resumegrafik: ~42 rows (приблизительно)
-/*!40000 ALTER TABLE `resumegrafik` DISABLE KEYS */;
-REPLACE INTO `resumegrafik` (`id`, `resume_id`, `grafik_id`) VALUES
+-- Дамп данных таблицы yii2rabota.resumeschedule: ~42 rows (приблизительно)
+/*!40000 ALTER TABLE `resumeschedule` DISABLE KEYS */;
+REPLACE INTO `resumeschedule` (`id`, `resume_id`, `schedule_id`) VALUES
 	(21, 2, 1),
 	(22, 2, 3),
 	(23, 2, 4),
@@ -186,24 +186,24 @@ REPLACE INTO `resumegrafik` (`id`, `resume_id`, `grafik_id`) VALUES
 	(439, 13, 2),
 	(440, 13, 4),
 	(441, 13, 6);
-/*!40000 ALTER TABLE `resumegrafik` ENABLE KEYS */;
+/*!40000 ALTER TABLE `resumeschedule` ENABLE KEYS */;
 
--- Дамп структуры для таблица yii2rabota.resumezanyatost
-DROP TABLE IF EXISTS `resumezanyatost`;
-CREATE TABLE IF NOT EXISTS `resumezanyatost` (
+-- Дамп структуры для таблица yii2rabota.ResumeEmployment
+DROP TABLE IF EXISTS `ResumeEmployment`;
+CREATE TABLE IF NOT EXISTS `ResumeEmployment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
-  `zanyatost_id` int(11) NOT NULL,
+  `employment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  KEY `zanyatost_id` (`zanyatost_id`),
-  CONSTRAINT `FK_resumezanyatost_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`),
-  CONSTRAINT `FK_resumezanyatost_zanaytost` FOREIGN KEY (`zanyatost_id`) REFERENCES `zanaytost` (`id`)
+  KEY `employment_id` (`employment_id`),
+  CONSTRAINT `FK_ResumeEmployment_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`),
+  CONSTRAINT `FK_ResumeEmployment_employments` FOREIGN KEY (`employment_id`) REFERENCES `employments` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii2rabota.resumezanyatost: ~35 rows (приблизительно)
-/*!40000 ALTER TABLE `resumezanyatost` DISABLE KEYS */;
-REPLACE INTO `resumezanyatost` (`id`, `resume_id`, `zanyatost_id`) VALUES
+-- Дамп данных таблицы yii2rabota.ResumeEmployment: ~35 rows (приблизительно)
+/*!40000 ALTER TABLE `ResumeEmployment` DISABLE KEYS */;
+REPLACE INTO `ResumeEmployment` (`id`, `resume_id`, `employment_id`) VALUES
 	(33, 5, 1),
 	(34, 5, 2),
 	(35, 5, 3),
@@ -239,7 +239,7 @@ REPLACE INTO `resumezanyatost` (`id`, `resume_id`, `zanyatost_id`) VALUES
 	(225, 13, 2),
 	(226, 13, 4),
 	(227, 13, 5);
-/*!40000 ALTER TABLE `resumezanyatost` ENABLE KEYS */;
+/*!40000 ALTER TABLE `ResumeEmployment` ENABLE KEYS */;
 
 -- Дамп структуры для таблица yii2rabota.specializations
 DROP TABLE IF EXISTS `specializations`;
@@ -306,23 +306,23 @@ REPLACE INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `password_re
 	(3, 'Сачек', 'JuI9xVZl1t_keFqIuTU38fw_Ne_eYebN', '$2y$13$QC1MitQutGNAasepTdjN8.t1C7sGju2uXvFTrVURBthtrvm84gxUm', NULL, 'ewr@klmsd.sdf', 1606303070, 1606303070, 0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
--- Дамп структуры для таблица yii2rabota.zanaytost
-DROP TABLE IF EXISTS `zanaytost`;
-CREATE TABLE IF NOT EXISTS `zanaytost` (
+-- Дамп структуры для таблица yii2rabota.employments
+DROP TABLE IF EXISTS `employments`;
+CREATE TABLE IF NOT EXISTS `employments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Дамп данных таблицы yii2rabota.zanaytost: ~5 rows (приблизительно)
-/*!40000 ALTER TABLE `zanaytost` DISABLE KEYS */;
-REPLACE INTO `zanaytost` (`id`, `name`) VALUES
+-- Дамп данных таблицы yii2rabota.employments: ~5 rows (приблизительно)
+/*!40000 ALTER TABLE `employments` DISABLE KEYS */;
+REPLACE INTO `employments` (`id`, `name`) VALUES
 	(1, 'Полная занятость'),
 	(2, 'Частичная занятость'),
 	(3, 'Проектная/Временная работа'),
 	(4, 'Волонтёрство'),
 	(5, 'Стажировка');
-/*!40000 ALTER TABLE `zanaytost` ENABLE KEYS */;
+/*!40000 ALTER TABLE `employments` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -143,8 +143,8 @@ class ResumeController extends Controller
 
     {
         $image = new UploadImage();
-        $resume = new Resume();
-        $resume->findModel($id);
+        $resume = Resume::find()->where(['id' => $id])->one();
+
         if ($resume->load(Yii::$app->request->post()) && $resume->save()) {
             return $this->redirect(['view', 'id' => $resume->id]);
         }

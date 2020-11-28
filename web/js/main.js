@@ -100,7 +100,7 @@ $(function () {
 
 $(function () {
 
-    $('input:radio[name="Resume[opyt_check]"]').on('change', function (){
+    $('input:radio[name="Resume[experience_check]"]').on('change', function (){
         if ($(this).val() === '0') {
             
               $('#exp_div').slideUp("slow");      
@@ -216,21 +216,21 @@ $(function () {
             NewUri.addSearch("specialization_id", specialization_id);
         }
 
-        $('#opyt_dev input:checked').each(function() {
+        $('#experience_dev input:checked').each(function() {
            
-            NewUri.addSearch("opyt_dev[]", $(this).val());
+            NewUri.addSearch("experience_dev[]", $(this).val());
             console.log($(this).val());
         });
 
-        $('#zanyatost input:checked').each(function() {
+        $('#employment input:checked').each(function() {
            
-            NewUri.addSearch("zanyatosts[]", $(this).val());
+            NewUri.addSearch("employments[]", $(this).val());
             console.log($(this).val());
         });
 
-        $('#grafik input:checked').each(function() {
+        $('#schedule input:checked').each(function() {
            
-            NewUri.addSearch("grafiks[]", $(this).val());
+            NewUri.addSearch("schedules[]", $(this).val());
             console.log($(this).val());
         });
         

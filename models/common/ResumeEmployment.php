@@ -2,26 +2,27 @@
 
 namespace app\models\common;
 
+use app\models\Resume;
 use Yii;
 
 /**
- * This is the model class for table "resumezanyatost".
+ * This is the model class for table "ResumeEmployment".
  *
  * @property int $id
  * @property int $resume_id
- * @property int $zanyatost_id
+ * @property int $employment_id
  *
  * @property Resume $resume
- * @property Zanaytost $zanyatost
+ * @property Employment $employment
  */
-class Resumezanyatost extends \yii\db\ActiveRecord
+class ResumeEmployment extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'resumezanyatost';
+        return 'resume_employment_tbl';
     }
 
     /**
@@ -30,10 +31,10 @@ class Resumezanyatost extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['resume_id', 'zanyatost_id'], 'required'],
-            [['resume_id', 'zanyatost_id'], 'integer'],
+            [['resume_id', 'employment_id'], 'required'],
+            [['resume_id', 'employment_id'], 'integer'],
             [['resume_id'], 'exist', 'skipOnError' => true, 'targetClass' => Resume::className(), 'targetAttribute' => ['resume_id' => 'id']],
-            [['zanyatost_id'], 'exist', 'skipOnError' => true, 'targetClass' => Zanaytost::className(), 'targetAttribute' => ['zanyatost_id' => 'id']],
+            [['employment_id'], 'exist', 'skipOnError' => true, 'targetClass' => Employments::className(), 'targetAttribute' => ['employment_id' => 'id']],
         ];
     }
 
@@ -45,7 +46,7 @@ class Resumezanyatost extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'resume_id' => 'Resume ID',
-            'zanyatost_id' => 'Zanyatost ID',
+            'employment_id' => 'Employment ID',
         ];
     }
 
@@ -60,12 +61,12 @@ class Resumezanyatost extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Zanyatost]].
+     * Gets query for [[Employment]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getZanyatost()
+    public function getEmployment()
     {
-        return $this->hasOne(Zanaytost::className(), ['id' => 'zanyatost_id']);
+        return $this->hasOne(Employments::className(), ['id' => 'employment_id']);
     }
 }

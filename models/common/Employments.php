@@ -5,21 +5,21 @@ namespace app\models\common;
 use Yii;
 
 /**
- * This is the model class for table "zanaytost".
+ * This is the model class for table "employments".
  *
  * @property int $id
  * @property string|null $name
  *
- * @property Resumezanyatost[] $resumezanyatosts
+ * @property ResumeEmployment[] $ResumeEmployments
  */
-class Zanaytost extends \yii\db\ActiveRecord
+class Employments extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'zanaytost';
+        return 'employments';
     }
 
     /**
@@ -44,12 +44,12 @@ class Zanaytost extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Resumezanyatosts]].
+     * Gets query for [[ResumeEmployments]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResumezanyatosts()
+    public function getResumeEmployments()
     {
-        return $this->hasMany(Resumezanyatost::className(), ['zanyatost_id' => 'id']);
+        return $this->hasMany(ResumeEmployment::className(), ['employment_id' => 'id']);
     }
 }

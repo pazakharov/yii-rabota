@@ -43,37 +43,37 @@ class ResumeSearch extends Resume
     {
         $query = Resume::find()->where('1=1')
             ->with('specialization')
-            ->with('opyts');
+            ->with('experiencs');
 
         $query->limit(100);
 
 
-        $allowed = ['specialization_id', 'sex', 'city','author_id'];
+        $allowed = ['specialization_id', 'sex', 'city', 'author_id'];
         $data = array_intersect_key($params, array_flip($allowed));
         $query->andFilterWhere($data);
 
-        $allowed = ['opyt_dev'];
+        $allowed = ['experience_dev'];
         $data = array_intersect_key($params, array_flip($allowed));
         $operand1 = '';
         $operand2 = '';
         $operand3 = '';
         $operand4 = '';
-        foreach ($data as $opyt) {
-            foreach ($opyt as $key => $value) {
+        foreach ($data as $experience) {
+            foreach ($experience as $key => $value) {
                 switch ($value) {
                     case 1:
                         $userQuery1 = (new Query())->select('resume_id')
-                            ->from('opyt')
+                            ->from('experience')
                             ->groupBy('resume_id');
 
                         $operand1 = ['not in', 'id', $userQuery1];
                         break;
 
                     case 2:
-                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
-                            ->from('opyt')
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as experience')
+                            ->from('experience')
                             ->groupBy('resume_id')
-                            ->Having('opyt >= 1 AND opyt <= 3');
+                            ->Having('experience >= 1 AND experience <= 3');
 
                         $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
 
@@ -81,20 +81,20 @@ class ResumeSearch extends Resume
                         break;
 
                     case 3:
-                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
-                            ->from('opyt')
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as experience')
+                            ->from('experience')
                             ->groupBy('resume_id')
-                            ->Having('opyt >= 3 AND opyt <= 6');
+                            ->Having('experience >= 3 AND experience <= 6');
 
                         $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
                         $operand3 = ['id' => $userQuery2];
                         break;
 
                     case 4:
-                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as opyt')
-                            ->from('opyt')
+                        $userQuery1 = (new Query())->select('resume_id, YEAR(FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1))))  as experience')
+                            ->from('experience')
                             ->groupBy('resume_id')
-                            ->Having('opyt > 6 ');
+                            ->Having('experience > 6 ');
 
                         $userQuery2 = (new Query())->select('resume_id')->from($userQuery1);
                         $operand4 = ['id' => $userQuery2];
@@ -104,24 +104,24 @@ class ResumeSearch extends Resume
         }
 
         $query->andFilterWhere(['OR', $operand1, $operand2, $operand3, $operand4]);
-        $allowed = ['grafiks'];
+        $allowed = ['schedules'];
         $data = array_intersect_key($params, array_flip($allowed));
-        if (isset($data['grafiks'])) {
+        if (isset($data['schedules'])) {
 
             $userQuery1 = (new Query())->select('resume_id')
-                ->from('resumegrafik')
-                ->where(['grafik_id' => array_values($data['grafiks'])])
+                ->from('resume_schedule_tbl')
+                ->where(['schedule_id' => array_values($data['schedules'])])
                 ->column();
             $query->andFilterWhere(['id' => $userQuery1]);
         }
 
-        $allowed = ['zanyatosts'];
+        $allowed = ['employments'];
         $data = array_intersect_key($params, array_flip($allowed));
-        if (isset($data['zanyatosts'])) {
+        if (isset($data['employments'])) {
 
             $userQuery1 = (new Query())->select('resume_id')
-                ->from('resumezanyatost')
-                ->where(['zanyatost_id' => array_values($data['zanyatosts'])])
+                ->from('resume_employment_tbl')
+                ->where(['employment_id' => array_values($data['employments'])])
                 ->column();
             $query->andFilterWhere(['id' => $userQuery1]);
         }

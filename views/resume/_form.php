@@ -1,7 +1,7 @@
 <?php
 
-use app\models\common\Grafik;
-use app\models\common\Zanaytost;
+use app\models\common\Schedule;
+use app\models\common\Employment;
 use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -179,7 +179,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model, 'ZArray')->checkboxList($model->getAvailibleZanyatost(), [
+                <?= $form->field($model, 'ZArray')->checkboxList($model->getAvailibleEmployments(), [
                     'item' => function ($index, $label, $name, $checked, $value) {
                         $ch = '';
                         if ($checked == 1) {
@@ -207,7 +207,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model, 'GrafikArray')->checkboxList($model->getAvailibleGrafiks(), [
+                <?= $form->field($model, 'ScheduleArray')->checkboxList($model->getAvailibleSchedules(), [
                     'item' => function ($index, $label, $name, $checked, $value) {
                         $ch = '';
                         if ($checked == 1) {
@@ -216,10 +216,10 @@ use yii\helpers\Url;
 
                         return '<div class="form-check d-flex">
                                                                                     <input name="' . $name . '" type="checkbox" class="form-check-input" value="' . $value . '"
-                                                                                        id="grafikCheck' . $index . '" ' . $ch . '>
+                                                                                        id="scheduleCheck' . $index . '" ' . $ch . '>
                                                                                     <label class="form-check-label"
-                                                                                        for="grafikCheck' . $index . '"></label>
-                                                                                    <label for="grafikCheck' . $index . '"
+                                                                                        for="scheduleCheck' . $index . '"></label>
+                                                                                    <label for="scheduleCheck' . $index . '"
                                                                                         class="profile-info__check-text job-resolution-checkbox">' . $label . '</label>
                                                                                 </div>';
                     }
@@ -239,7 +239,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
 
-                <?= $form->field($model, 'opyt_check')
+                <?= $form->field($model, 'experience_check')
                     ->radioList(
                         [1 => 'Есть опыт', 0 => 'Нет опыта работы'],
                         [
@@ -250,8 +250,8 @@ use yii\helpers\Url;
                                     $ch = 'checked';
                                 }
 
-                                $return = '<li><input type="radio" id="opyt_radio' . $index . '" name="' . $name . '" value="' . $value . '"' . $ch . '>';
-                                $return .=  '<label for="opyt_radio' . $index . '">' . ucwords($label) . '</label></li>';
+                                $return = '<li><input type="radio" id="experience_radio' . $index . '" name="' . $name . '" value="' . $value . '"' . $ch . '>';
+                                $return .=  '<label for="experience_radio' . $index . '">' . ucwords($label) . '</label></li>';
 
 
                                 return $return;
@@ -265,7 +265,7 @@ use yii\helpers\Url;
         </div>
     </div>
 
-    <div id="exp_div" class="row <?php if ($model->opyt_check === 0) {
+    <div id="exp_div" class="row <?php if ($model->experience_check === 0) {
                                         echo 'hidden';
                                     } ?>">
 
@@ -273,9 +273,9 @@ use yii\helpers\Url;
 
         $index = 0;
 
-        foreach ($model->opyts as $rabota) {
+        foreach ($model->experiencs as $rabota) {
 
-            echo $this->render('_opyt', ['rabota' => $rabota, 'index' => $index, 'form' => $form]);
+            echo $this->render('_experience', ['rabota' => $rabota, 'index' => $index, 'form' => $form]);
 
             $index++;
         }
@@ -285,7 +285,7 @@ use yii\helpers\Url;
         ?>
 
     </div>
-    <div id="add_div" class="row mb32 <?php if ($model->opyt_check === 0) {
+    <div id="add_div" class="row mb32 <?php if ($model->experience_check === 0) {
                                             echo 'hidden';
                                         } ?>">
         <div class="row"><button type="button" class="btn btn-link" id="add">+ Добавить место работы</button></div>
@@ -331,7 +331,7 @@ use yii\helpers\Url;
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
-                            <select name="Resume[opyt][iteration][month1]" class="nselectlist" data-title="Месяц">
+                            <select name="Resume[experience][iteration][month1]" class="nselectlist" data-title="Месяц">
                                 <option value="01">Январь</option>
                                 <option value="02">Февраль</option>
                                 <option value="03">Март</option>
@@ -347,7 +347,7 @@ use yii\helpers\Url;
                             </select>
                         </div>
                         <div class="citizenship-select w100">
-                            <input name="Resume[opyt][iteration][year1]" placeholder="2006" type="text" class="dor-input w100">
+                            <input name="Resume[experience][iteration][year1]" placeholder="2006" type="text" class="dor-input w100">
                         </div>
                     </div>
                 </div>
@@ -359,7 +359,7 @@ use yii\helpers\Url;
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
-                            <select name="Resume[opyt][iteration][month2]" class="nselectlist" data-title="Месяц">
+                            <select name="Resume[experience][iteration][month2]" class="nselectlist" data-title="Месяц">
                                 <option value="01">Январь</option>
                                 <option value="02">Февраль</option>
                                 <option value="03">Март</option>
@@ -375,7 +375,7 @@ use yii\helpers\Url;
                             </select>
                         </div>
                         <div class="citizenship-select w100">
-                            <input name="Resume[opyt][iteration][year2]" placeholder="2006" type="text" class="dor-input w100">
+                            <input name="Resume[experience][iteration][year2]" placeholder="2006" type="text" class="dor-input w100">
                         </div>
                     </div>
                 </div>
@@ -386,7 +386,7 @@ use yii\helpers\Url;
                 <div class="col-lg-3 col-md-4 col-11">
                     <div class="profile-info">
                         <div class="form-check d-flex">
-                            <input name="Resume[opyt][iteration][present_check]" type="checkbox" index="iteration" class="form-check-input" id="Date2-check-iteration">
+                            <input name="Resume[experience][iteration][present_check]" type="checkbox" index="iteration" class="form-check-input" id="Date2-check-iteration">
                             <label class="form-check-label" for="Date2-check-iteration"></label>
                             <label for="Date2-check-iteration" class="profile-info__check-text job-resolution-checkbox">По
                                 настоящее
@@ -400,7 +400,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Организация</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
-                    <input name="Resume[opyt][iteration][organization]" type="text" class="dor-input w100">
+                    <input name="Resume[experience][iteration][organization]" type="text" class="dor-input w100">
                 </div>
             </div>
             <div class="row mb16">
@@ -408,7 +408,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Должность</div>
                 </div>
                 <div class="col-lg-3 col-md-4 col-11">
-                    <input name="Resume[opyt][iteration][position]" type="text" class="dor-input w100">
+                    <input name="Resume[experience][iteration][position]" type="text" class="dor-input w100">
                 </div>
             </div>
             <div class="row mb64 mobile-mb32">
@@ -416,7 +416,7 @@ use yii\helpers\Url;
                     <div class="paragraph">Обязанности, функции, достижения</div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-12">
-                    <textarea name="Resume[opyt][iteration][duties]" class="dor-input w100 h96 mb8" placeholder="Расскажите о своих обязанностях, функциях и достижениях"></textarea>
+                    <textarea name="Resume[experience][iteration][duties]" class="dor-input w100 h96 mb8" placeholder="Расскажите о своих обязанностях, функциях и достижениях"></textarea>
                     <div class="mb24"><button type="button" class="delbutton btn btn-link">Удалить место работы</button></div>
 
                 </div>

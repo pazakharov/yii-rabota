@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "opyt".
+ * This is the model class for table "experience".
  *
  * @property int $id
  * @property int $resume_id
@@ -21,14 +21,14 @@ use Yii;
  *
  * @property Resume $resume
  */
-class Opyt extends \yii\db\ActiveRecord
+class Experience extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'opyt';
+        return 'experience';
     }
 
     /**

@@ -7,7 +7,7 @@ use app\models\Resume;
 use yii\widgets\ListView;
 use yii\helpers\ArrayHelper;
 use \app\models\Specializations;
-use app\models\common\Zanaytost;
+use app\models\common\Employment;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ResumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -99,8 +99,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="profile-info">
 
                             <?= Html::checkboxList(
-                                'opyt_dev',
-                                isset($params['opyt_dev']) ? $params['opyt_dev'] : '',
+                                'experience_dev',
+                                isset($params['experience_dev']) ? $params['experience_dev'] : '',
                                 [
                                     '1' => 'Без опыта',
                                     '2' => 'от 1 года до 3 лет',
@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             '</label>
                                         </div>';
                                     },
-                                    'id' => 'opyt_dev',
+                                    'id' => 'experience_dev',
                                 ]
                             ); ?>
 
@@ -135,13 +135,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="paragraph cadet-blue">Тип занятости</div>
                         <div class="profile-info">
                             <?= Html::checkboxList(
-                                'zanyatost',
-                                isset($params['zanyatost']) ? $params['zanyatost'] : '',
-                                Resume::getAvailibleZanyatost(),
+                                'employment',
+                                isset($params['employment']) ? $params['employment'] : '',
+                                Resume::getAvailibleEmployments(),
                                 [
                                     'item' => function ($index, $label, $name, $checked, $value) {
                                         $ch = '';
-                                        $index = 'zanyatost' . $index;
+                                        $index = 'employment' . $index;
                                         if ($checked == 1) {
                                             $ch = 'checked';
                                         }
@@ -155,7 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             '</label>
                                         </div>';
                                     },
-                                    'id' => 'zanyatost',
+                                    'id' => 'employment',
                                 ]
                             ); ?>
                         </div>
@@ -165,13 +165,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="profile-info">
 
                             <?= Html::checkboxList(
-                                'grafik',
-                                isset($params['grafiks']) ? $params['grafiks'] : '',
-                                Resume::getAvailibleGrafiks(),
+                                'schedule',
+                                isset($params['schedules']) ? $params['schedules'] : '',
+                                Resume::getAvailibleSchedules(),
                                 [
                                     'item' => function ($index, $label, $name, $checked, $value) {
                                         $ch = '';
-                                        $index = 'grafik' . $index;
+                                        $index = 'schedule' . $index;
                                         if ($checked == 1) {
                                             $ch = 'checked';
                                         }
@@ -185,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             '</label>
                                         </div>';
                                     },
-                                    'id' => 'grafik',
+                                    'id' => 'schedule',
                                 ]
                             ); ?>
 

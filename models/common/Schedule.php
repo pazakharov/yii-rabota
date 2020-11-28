@@ -5,21 +5,21 @@ namespace app\models\common;
 use Yii;
 
 /**
- * This is the model class for table "grafik".
+ * This is the model class for table "schedule".
  *
  * @property int $id
  * @property string $name
  *
- * @property Resumegrafik[] $resumegrafiks
+ * @property ResumeSchedule[] $resumeschedules
  */
-class Grafik extends \yii\db\ActiveRecord
+class Schedule extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'grafik';
+        return 'schedule';
     }
 
     /**
@@ -44,12 +44,12 @@ class Grafik extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Resumegrafiks]].
+     * Gets query for [[ResumeSchedules]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResumegrafiks()
+    public function getResumeSchedules()
     {
-        return $this->hasMany(Resumegrafik::className(), ['grafik_id' => 'id']);
+        return $this->hasMany(ResumeSchedule::className(), ['schedule_id' => 'id']);
     }
 }

@@ -6,23 +6,23 @@ use Yii;
 use app\models\Resume;
 
 /**
- * This is the model class for table "resumegrafik".
+ * This is the model class for table "resumeschedule".
  *
  * @property int $id
  * @property int $resume_id
- * @property int $grafik_id
+ * @property int $schedule_id
  *
- * @property Grafik $grafik
+ * @property Schedule $schedule
  * @property Resume $resume
  */
-class Resumegrafik extends \yii\db\ActiveRecord
+class ResumeSchedule extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'resumegrafik';
+        return 'resume_schedule_tbl';
     }
 
     /**
@@ -31,9 +31,9 @@ class Resumegrafik extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['resume_id', 'grafik_id'], 'required'],
-            [['resume_id', 'grafik_id'], 'integer'],
-            [['grafik_id'], 'exist', 'skipOnError' => true, 'targetClass' => Grafik::className(), 'targetAttribute' => ['grafik_id' => 'id']],
+            [['resume_id', 'schedule_id'], 'required'],
+            [['resume_id', 'schedule_id'], 'integer'],
+            [['schedule_id'], 'exist', 'skipOnError' => true, 'targetClass' => Schedule::className(), 'targetAttribute' => ['schedule_id' => 'id']],
             [['resume_id'], 'exist', 'skipOnError' => true, 'targetClass' => Resume::className(), 'targetAttribute' => ['resume_id' => 'id']],
         ];
     }
@@ -46,18 +46,18 @@ class Resumegrafik extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'resume_id' => 'Resume ID',
-            'grafik_id' => 'Grafik ID',
+            'schedule_id' => 'Schedule ID',
         ];
     }
 
     /**
-     * Gets query for [[Grafik]].
+     * Gets query for [[Schedule]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getGrafik()
+    public function getSchedule()
     {
-        return $this->hasOne(Grafik::className(), ['id' => 'grafik_id']);
+        return $this->hasOne(Schedule::className(), ['id' => 'schedule_id']);
     }
 
     /**
@@ -69,6 +69,4 @@ class Resumegrafik extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Resume::className(), ['id' => 'resume_id']);
     }
-
-   
 }

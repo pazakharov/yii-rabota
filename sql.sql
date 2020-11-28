@@ -12,8 +12,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Дамп структуры для таблица yii2rabota.grafik
-CREATE TABLE IF NOT EXISTS `grafik` (
+-- Дамп структуры для таблица yii2rabota.schedule
+CREATE TABLE IF NOT EXISTS `schedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `migration` (
 
 -- Экспортируемые данные не выделены.
 
--- Дамп структуры для таблица yii2rabota.opyt
-CREATE TABLE IF NOT EXISTS `opyt` (
+-- Дамп структуры для таблица yii2rabota.experience
+CREATE TABLE IF NOT EXISTS `experience` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
   `date1` date NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `opyt` (
   `year2` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  CONSTRAINT `FK_opyt_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
+  CONSTRAINT `FK_experience_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
@@ -77,30 +77,30 @@ CREATE TABLE IF NOT EXISTS `resume` (
 
 -- Экспортируемые данные не выделены.
 
--- Дамп структуры для таблица yii2rabota.resumegrafik
-CREATE TABLE IF NOT EXISTS `resumegrafik` (
+-- Дамп структуры для таблица yii2rabota.resumeschedule
+CREATE TABLE IF NOT EXISTS `resumeschedule` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
-  `grafik_id` int(11) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  KEY `grafik_id` (`grafik_id`),
-  CONSTRAINT `FK_resumegrafik_grafik` FOREIGN KEY (`grafik_id`) REFERENCES `grafik` (`id`),
-  CONSTRAINT `FK_resumegrafik_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
+  KEY `schedule_id` (`schedule_id`),
+  CONSTRAINT `FK_resumeschedule_schedule` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`id`),
+  CONSTRAINT `FK_resumeschedule_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=442 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 
--- Дамп структуры для таблица yii2rabota.resumezanyatost
-CREATE TABLE IF NOT EXISTS `resumezanyatost` (
+-- Дамп структуры для таблица yii2rabota.ResumeEmployment
+CREATE TABLE IF NOT EXISTS `ResumeEmployment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `resume_id` int(11) NOT NULL,
-  `zanyatost_id` int(11) NOT NULL,
+  `employment_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `resume_id` (`resume_id`),
-  KEY `zanyatost_id` (`zanyatost_id`),
-  CONSTRAINT `FK_resumezanyatost_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`),
-  CONSTRAINT `FK_resumezanyatost_zanaytost` FOREIGN KEY (`zanyatost_id`) REFERENCES `zanaytost` (`id`)
+  KEY `employment_id` (`employment_id`),
+  CONSTRAINT `FK_ResumeEmployment_resume` FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`),
+  CONSTRAINT `FK_ResumeEmployment_employments` FOREIGN KEY (`employment_id`) REFERENCES `employments` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
@@ -133,8 +133,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Экспортируемые данные не выделены.
 
--- Дамп структуры для таблица yii2rabota.zanaytost
-CREATE TABLE IF NOT EXISTS `zanaytost` (
+-- Дамп структуры для таблица yii2rabota.employments
+CREATE TABLE IF NOT EXISTS `employments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)

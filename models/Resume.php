@@ -3,13 +3,12 @@
 namespace app\models;
 
 use Yii;
-use app\models\common\Grafik;
-use app\models\common\Zanaytost;
-use app\models\common\Resumegrafik;
-use app\models\common\Resumezanyatost;
-use app\models\Opyt;
-use Symfony\Component\CssSelector\Node\FunctionNode;
+use app\models\Experience;
+use app\models\common\Schedule;
+use app\models\common\Employments;
 use yii\behaviors\TimestampBehavior;
+use app\models\common\ResumeSchedule;
+use app\models\common\ResumeEmployment;
 
 /**
  * This is the model class for table "resume".
@@ -34,9 +33,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Resume extends \yii\db\ActiveRecord
 {
-    private $_grafik_buffer;
+    private $_schedule_buffer;
     private $_z_buffer;
-    public $opyt;
+    public $experience;
 
     /**
      * {@inheritdoc}
@@ -52,10 +51,10 @@ class Resume extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['GrafikArray', 'ZArray', 'author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id', 'zp'], 'required'],
+            [['ScheduleArray', 'ZArray', 'author_id', 'first_name', 'middle_name', 'last_name', 'birthdate', 'sex', 'city', 'mail', 'phone', 'specialization_id', 'zp'], 'required'],
             [['author_id', 'specialization_id', 'zp', 'created_at', 'updated_at'], 'integer'],
             [['birthdate'], 'safe'],
-            [['GrafikArray', 'ZArray', 'opyt', 'opyt_check'], 'safe'],
+            [['ScheduleArray', 'ZArray', 'experience', 'experience_check'], 'safe'],
             [['about'], 'string'],
             [['first_name', 'middle_name', 'last_name', 'sex', 'city', 'mail', 'phone'], 'string', 'max' => 255],
             [['specialization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Specializations::className(), 'targetAttribute' => ['specialization_id' => 'id']],
@@ -83,10 +82,10 @@ class Resume extends \yii\db\ActiveRecord
             'specialization_id' => Yii::t('app', 'ID Специализации'),
             'about' => Yii::t('app', 'Обо мне'),
             'foto' => Yii::t('app', 'Фото'),
-            'GrafikArray' => Yii::t('app', 'График'),
+            'ScheduleArray' => Yii::t('app', 'График'),
             'ZArray' => Yii::t('app', 'Занятость'),
             'zp' => Yii::t('app', 'Зарплата'),
-            'opyt' => Yii::t('app', 'Опыт работы'),
+            'experience' => Yii::t('app', 'Опыт работы'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -126,77 +125,82 @@ class Resume extends \yii\db\ActiveRecord
         return $age;
     }
 
+    /**
+     * Возвращает правильную форму  ['год', 'года', 'лет']
+     * 
+     * @param integer $num
+     * @param array $forms
+     * 
+     * @return string
+     */
     private function _decline($num, $forms)
     {
         return $num % 10 == 1 && $num % 100 != 11 ? $forms[0] : ($num % 10 >= 2 && $num % 10 <= 4 && ($num % 100 < 10 || $num % 100 >= 20) ? $forms[1] : $forms[2]);
     }
 
     /**
-     * Gets query for [[Grafiks]].
+     * Gets query for [[Schedules]].
      *
      * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
      */
 
-    public function getResumegrafik()
+    public function getResumeSchedule()
     {
-        return $this->hasMany(Resumegrafik::className(), ['resume_id' => 'id']);
+        return $this->hasMany(ResumeSchedule::className(), ['resume_id' => 'id']);
     }
     /**
-     * Gets query for [[Grafiks]].
+     * Gets query for [[Schedules]].
      *
      * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
      */
 
-    public function getGrafiks()
+    public function getSchedules()
     {
-        return $this->hasMany(Grafik::className(), ['id' => 'grafik_id'])->via('resumegrafik');
+        return $this->hasMany(Schedule::className(), ['id' => 'schedule_id'])->via('resumeSchedule');
     }
 
     /**
-     * Gets query for [[Resumezanyatosts]].
+     * Gets query for [[ResumeEmployments]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getResumezanyatosts()
+    public function getResumeEmployments()
     {
-        return $this->hasMany(Resumezanyatost::className(), ['resume_id' => 'id']);
+        return $this->hasMany(ResumeEmployment::className(), ['resume_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Zanyatost]].
+     * Gets query for [[Employment]].
      *
      * @return \yii\db\ActiveQuery|\app\Query\models\UserQuery
      */
 
-    public function getZanyatosts()
+    public function getEmployments()
     {
-        return $this->hasMany(Zanaytost::className(), ['id' => 'zanyatost_id'])->via('resumezanyatosts');
+        return $this->hasMany(Employments::className(), ['id' => 'employment_id'])->via('resumeEmployments');
     }
-
-
 
     /**
      * @param array $array
      * 
      * @return void
      */
-    public function setGrafikArray($array)
+    public function setScheduleArray($array)
     {
-        $this->_grafik_buffer = (array)$array;
+        $this->_schedule_buffer = (array)$array;
     }
 
     /**
      * @return array
      */
-    public function getGrafikArray()
+    public function getScheduleArray()
     {
-        if ($this->_grafik_buffer === null) {
-            $this->_grafik_buffer =  $this->getGrafiks()->select('id')->column();
+        if ($this->_schedule_buffer === null) {
+            $this->_schedule_buffer =  $this->getSchedules()->select('id')->column();
         }
 
-        return  $this->_grafik_buffer;
+        return  $this->_schedule_buffer;
     }
-
 
     /**
      * @param array $array
@@ -212,52 +216,50 @@ class Resume extends \yii\db\ActiveRecord
     public function getZArray()
     {
         if ($this->_z_buffer === null) {
-            $this->_z_buffer =  $this->getZanyatosts()->select('id')->column();
+            $this->_z_buffer =  $this->getEmployments()->select('id')->column();
         }
         return  $this->_z_buffer;
     }
 
-
     /**
-     * Gets query for [[Opyts]].
+     * Gets query for [[Experiences]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOpyts()
+    public function getExperiencs()
     {
-        return  $this->hasMany(Opyt::className(), ['resume_id' => 'id']);
+        return  $this->hasMany(Experience::className(), ['resume_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Opyts]].
+     * Gets query for [[Experiences]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function setOpyt_check()
+    public function setExperience_check()
     {
 
-        $this->opyt = $this->opyt_check;
+        $this->experience = $this->experience_check;
     }
 
     /**
      * @return mixed
      */
-    public function getOpyt_check()
+    public function getExperience_check()
     {
-        if ($this->getOpyts()->count() > 0) {
+        if ($this->getExperiencs()->count() > 0) {
             return 1;
         } else {
             return null;
         }
     }
 
-
     /**
      * @return string
      */
     public function getStag()
     {
-        $stag = $this->getOpyts()->select('FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1)))')->scalar();
+        $stag = $this->getExperiencs()->select('FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1)))')->scalar();
         return str_replace(0, '', substr($stag, 0, 4)) . ' ' . $this->_decline(substr($stag, 2, 2), ['год', 'года', 'лет']);
     }
 
@@ -301,9 +303,9 @@ class Resume extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        $this->_updateGrafik();
-        $this->_updateZanyatost();
-        $this->_updateOpyt();
+        $this->_updateSchedule();
+        $this->_updateEmployment();
+        $this->_updateExperience();
         return parent::afterSave($insert, $changedAttributes);
     }
 
@@ -318,22 +320,22 @@ class Resume extends \yii\db\ActiveRecord
         return parent::afterValidate();
     }
 
-    private function _updateOpyt()
+    private function _updateExperience()
     {
-        if (isset($this->opyt)) {
-            if (count($this->opyt) > 0) {
-                Opyt::deleteAll('resume_id = ' . $this->id);
-                foreach ($this->opyt as $opyt) {
-                    $opyt['resume_id'] = $this->id;
-                    $opyt['date1'] = $opyt['year1'] . '-' . $opyt['month1'] . '-01 00:00:00';
-                    if (isset($opyt['present_check'])) {
-                        $opyt['date2'] = '0000-00-01 00:00:00';
+        if (isset($this->experience)) {
+            if (count($this->experience) > 0) {
+                Experience::deleteAll('resume_id = ' . $this->id);
+                foreach ($this->experience as $experience) {
+                    $experience['resume_id'] = $this->id;
+                    $experience['date1'] = $experience['year1'] . '-' . $experience['month1'] . '-01 00:00:00';
+                    if (isset($experience['present_check'])) {
+                        $experience['date2'] = '0000-00-01 00:00:00';
                     } else {
-                        $opyt['date2'] = $opyt['year2'] . '-' . $opyt['month2'] . '-01 00:00:00';
+                        $experience['date2'] = $experience['year2'] . '-' . $experience['month2'] . '-01 00:00:00';
                     }
-                    $Opyt_model = new Opyt();
-                    $Opyt_model->attributes = $opyt;
-                    $Opyt_model->save();
+                    $Experience_model = new Experience();
+                    $Experience_model->attributes = $experience;
+                    $Experience_model->save();
                 }
             }
         }
@@ -343,22 +345,22 @@ class Resume extends \yii\db\ActiveRecord
     /** 
      * @return bool
      */
-    private function _updateGrafik()
+    private function _updateSchedule()
     {
-        $this->unlinkAll('grafiks', true);
-        foreach ($this->_grafik_buffer as $key => $grafik_id) {
-            $this->link('grafiks', Grafik::findOne(['id' => $grafik_id]));
+        $this->unlinkAll('schedules', true);
+        foreach ($this->_schedule_buffer as $key => $schedule_id) {
+            $this->link('schedules', Schedule::findOne(['id' => $schedule_id]));
         }
     }
 
     /**
      * @return bool
      */
-    private function _updateZanyatost()
+    private function _updateEmployment()
     {
-        $this->unlinkAll('zanyatosts', true);
+        $this->unlinkAll('employments', true);
         foreach ($this->_z_buffer as $key => $z_id) {
-            $this->link('zanyatosts', Zanaytost::findOne(['id' => $z_id]));
+            $this->link('employments', Employments::findOne(['id' => $z_id]));
         }
     }
 
@@ -368,9 +370,9 @@ class Resume extends \yii\db\ActiveRecord
      *
      * @return array
      */
-    public static function getAvailibleZanyatost()
+    public static function getAvailibleEmployments()
     {
-        return Zanaytost::find()
+        return Employments::find()
             ->select(['name', 'id'])
             ->indexBy('id')
             ->column();
@@ -394,35 +396,35 @@ class Resume extends \yii\db\ActiveRecord
      *
      * @return void
      */
-    public static function getAvailibleGrafiks()
+    public static function getAvailibleSchedules()
     {
-        return Grafik::find()
+        return Schedule::find()
             ->select(['name', 'id'])
             ->indexBy('id')
             ->column();
     }
 
-    public function getLastopyt()
+    public function getLastexperience()
     {
-        return $this->getOpyts()->orderBy('id DESC')->limit(1)->one();
+        return $this->getExperiencs()->orderBy('id DESC')->limit(1)->one();
     }
 
-    public function getGrafiksNamesStr()
+    public function getSchedulesNamesStr()
     {
-        $grafik_array = [];
+        $schedule_array = [];
 
-        foreach ($this->grafiks as $grafik) {
-            $grafik_array[] = $grafik->name;
+        foreach ($this->schedules as $schedule) {
+            $schedule_array[] = $schedule->name;
         }
-        return implode(", ", $grafik_array);
+        return implode(", ", $schedule_array);
     }
 
-    public function getZanyatostNamesStr()
+    public function getEmploymentNamesStr()
     {
-        $zanyatost_array = [];
-        foreach ($this->zanyatosts as $z) {
-            $zanyatost_array[] = $z->name;
+        $employment_array = [];
+        foreach ($this->employments as $z) {
+            $employment_array[] = $z->name;
         }
-        return implode(", ", $zanyatost_array);
+        return implode(", ", $employment_array);
     }
 }
