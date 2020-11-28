@@ -14,7 +14,12 @@ body {
     margin-left: 0;
 }
 .help-block{
-    display: none;
+    display: block;
+    position: absolute;
+    left: 300px;
+    top: 10px;
+    width: 400px;
+    color: red;
 }
 .logout, .logout:hover{
     margin:0;
@@ -533,6 +538,10 @@ a {
 
 .has-error > input {
     border: 1px solid #d13636;
+}
+
+.has-error  .nselect__head {
+    border: 1px solid #d13636 !important; 
 }
 
 .main-wrapper {

@@ -126,8 +126,7 @@ $(function () {
        
         $('#exp_div .mesto:last').html($('#exp_div .mesto:last').html().replace(/iteration/g, index));
                  
-       // $('#exp_div .mesto:last .nselectlist').nselect();
-        console.log($('#exp_div .mesto:last .nselectlist'));
+        $('#exp_div .mesto:last .nselectlist').nSelect();
 
     }); 
     

@@ -26,9 +26,7 @@ class ResumeController extends Controller
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
+                'actions' => [],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -118,32 +116,19 @@ class ResumeController extends Controller
     public function actionCreate()
     {
         $resume = new Resume();
-
         $image = new UploadImage();
 
-
-        $resume->load(Yii::$app->request->post());
-
-
-        if ($resume->save()) {
-
+        if ($resume->load(Yii::$app->request->post()) && ($resume->save())) {
             return $this->redirect(['view', 'id' => $resume->id]);
-        } else {
-
-            foreach ($resume->getErrors() as $key => $value) {
-                Yii::$app->session->addFlash('error', $value[0]);
-            }
-
-            $resume->foto = "uploads/noavatar.png";
-            $resume->birthdate = date('Y-m-d');
-
-            return $this->render('create', [
-
-                'model' => $resume,
-
-                'model2' => $image,
-            ]);
         }
+
+        $resume->foto = "uploads/noavatar.png";
+        $resume->birthdate = date('Y-m-d');
+
+        return $this->render('create', [
+            'model' => $resume,
+            'model2' => $image,
+        ]);
     }
 
     /**
@@ -153,23 +138,18 @@ class ResumeController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionUpdate($id)
+
     {
         $image = new UploadImage();
-
-        $model = $this->findModel($id);
-
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        foreach ($model->getErrors() as $key => $value) {
-            Yii::$app->session->addFlash('error', $value[0]);
+        $resume = new Resume();
+        $resume->findModel($id);
+        if ($resume->load(Yii::$app->request->post()) && $resume->save()) {
+            return $this->redirect(['view', 'id' => $resume->id]);
         }
         return $this->render('update', [
-            'model' => $model,
+            'model' => $resume,
             'model2' => $image,
         ]);
     }
@@ -184,7 +164,6 @@ class ResumeController extends Controller
     public function actionDelete($id)
     {
         $this->findModel(['id' => $id, 'author_id' => Yii::$app->user->id])->delete();
-
         return $this->redirect(['index']);
     }
     /**

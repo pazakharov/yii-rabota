@@ -8,6 +8,7 @@ use app\models\common\Zanaytost;
 use app\models\common\Resumegrafik;
 use app\models\common\Resumezanyatost;
 use app\models\Opyt;
+use Symfony\Component\CssSelector\Node\FunctionNode;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -33,13 +34,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Resume extends \yii\db\ActiveRecord
 {
-
-
     private $_grafik_buffer;
     private $_z_buffer;
-
     public $opyt;
-
 
     /**
      * {@inheritdoc}
@@ -92,11 +89,8 @@ class Resume extends \yii\db\ActiveRecord
             'opyt' => Yii::t('app', 'Опыт работы'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-
-
         ];
     }
-
 
     public function behaviors()
     {
@@ -127,20 +121,13 @@ class Resume extends \yii\db\ActiveRecord
 
     public function getAge()
     {
-
         $age = (int)(date('Y')) - (int)substr($this->birthdate, 0, 4);
-
-
-
         $age = $age . ' ' . $this->_decline($age, ['год', 'года', 'лет']);
-
-
         return $age;
     }
 
     private function _decline($num, $forms)
     {
-
         return $num % 10 == 1 && $num % 100 != 11 ? $forms[0] : ($num % 10 >= 2 && $num % 10 <= 4 && ($num % 100 < 10 || $num % 100 >= 20) ? $forms[1] : $forms[2]);
     }
 
@@ -188,11 +175,19 @@ class Resume extends \yii\db\ActiveRecord
 
 
 
+    /**
+     * @param array $array
+     * 
+     * @return void
+     */
     public function setGrafikArray($array)
     {
         $this->_grafik_buffer = (array)$array;
     }
 
+    /**
+     * @return array
+     */
     public function getGrafikArray()
     {
         if ($this->_grafik_buffer === null) {
@@ -203,17 +198,22 @@ class Resume extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @param array $array
+     */
     public function setZArray($array)
     {
         $this->_z_buffer = (array)$array;
     }
 
+    /**
+     * @return array
+     */
     public function getZArray()
     {
         if ($this->_z_buffer === null) {
             $this->_z_buffer =  $this->getZanyatosts()->select('id')->column();
         }
-
         return  $this->_z_buffer;
     }
 
@@ -239,29 +239,27 @@ class Resume extends \yii\db\ActiveRecord
         $this->opyt = $this->opyt_check;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function getOpyt_check()
     {
-
         if ($this->getOpyts()->count() > 0) {
-
             return 1;
         } else {
-
             return null;
         }
     }
 
+
+    /**
+     * @return string
+     */
     public function getStag()
     {
-
         $stag = $this->getOpyts()->select('FROM_DAYS( to_days(MAX(DATE2)) - to_days(Min(DATE1)))')->scalar();
-
-
         return str_replace(0, '', substr($stag, 0, 4)) . ' ' . $this->_decline(substr($stag, 2, 2), ['год', 'года', 'лет']);
     }
-
-
 
     /**
      * {@inheritdoc}
@@ -271,24 +269,22 @@ class Resume extends \yii\db\ActiveRecord
     {
         return new \app\Query\models\ResumeQuery(get_called_class());
     }
-
     public function beforeSave($insert)
     {
-
         $this->birthdate = \DateTime::createFromFormat('d.m.Y', $this->birthdate)->format('Y-m-d');
-
         return parent::beforeSave($insert);
     }
 
-
+    /**
+     * @return bool
+     */
     public function beforeValidate()
     {
-
-        $this->author_id = Yii::$app->user->id;
-
+        if (!isset($this->author_id)) {
+            $this->author_id = Yii::$app->user->id;
+        }
         return parent::beforeValidate();
     }
-
 
     /**
      * @param mixed $insert
@@ -297,40 +293,46 @@ class Resume extends \yii\db\ActiveRecord
      * @return [type]
      */
 
+    /**
+     * @param mixed $insert
+     * @param mixed $changedAttributes
+     * 
+     * @return void
+     */
     public function afterSave($insert, $changedAttributes)
     {
         $this->_updateGrafik();
         $this->_updateZanyatost();
         $this->_updateOpyt();
-
-
-
         return parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * @return void
+     */
+    public function afterValidate()
+    {
+        foreach ($this->getErrors() as $key => $value) {
+            Yii::$app->session->addFlash('error', $value[0]);
+        }
+        return parent::afterValidate();
     }
 
     private function _updateOpyt()
     {
-
         if (isset($this->opyt)) {
             if (count($this->opyt) > 0) {
                 Opyt::deleteAll('resume_id = ' . $this->id);
-
                 foreach ($this->opyt as $opyt) {
                     $opyt['resume_id'] = $this->id;
-
                     $opyt['date1'] = $opyt['year1'] . '-' . $opyt['month1'] . '-01 00:00:00';
-
                     if (isset($opyt['present_check'])) {
-
                         $opyt['date2'] = '0000-00-01 00:00:00';
                     } else {
                         $opyt['date2'] = $opyt['year2'] . '-' . $opyt['month2'] . '-01 00:00:00';
                     }
-
                     $Opyt_model = new Opyt();
-
                     $Opyt_model->attributes = $opyt;
-
                     $Opyt_model->save();
                 }
             }
@@ -344,9 +346,7 @@ class Resume extends \yii\db\ActiveRecord
     private function _updateGrafik()
     {
         $this->unlinkAll('grafiks', true);
-
         foreach ($this->_grafik_buffer as $key => $grafik_id) {
-
             $this->link('grafiks', Grafik::findOne(['id' => $grafik_id]));
         }
     }
@@ -357,15 +357,12 @@ class Resume extends \yii\db\ActiveRecord
     private function _updateZanyatost()
     {
         $this->unlinkAll('zanyatosts', true);
-
-
         foreach ($this->_z_buffer as $key => $z_id) {
-
             $this->link('zanyatosts', Zanaytost::findOne(['id' => $z_id]));
         }
     }
 
-    
+
     /**
      * Выдает возможные занятости
      *
@@ -373,11 +370,10 @@ class Resume extends \yii\db\ActiveRecord
      */
     public static function getAvailibleZanyatost()
     {
-       return Zanaytost::find()
-       ->select(['name','id'])
-       ->indexBy('id')
-       ->column();
-        
+        return Zanaytost::find()
+            ->select(['name', 'id'])
+            ->indexBy('id')
+            ->column();
     }
 
     /**
@@ -387,11 +383,10 @@ class Resume extends \yii\db\ActiveRecord
      */
     public static function getAvailibleSpecializations()
     {
-       return Specializations::find()
-       ->select(['name','id'])
-       ->indexBy('id')
-       ->column();
-        
+        return Specializations::find()
+            ->select(['name', 'id'])
+            ->indexBy('id')
+            ->column();
     }
 
     /**
@@ -401,39 +396,33 @@ class Resume extends \yii\db\ActiveRecord
      */
     public static function getAvailibleGrafiks()
     {
-       return Grafik::find()
-       ->select(['name','id'])
-       ->indexBy('id')
-       ->column();
-        
+        return Grafik::find()
+            ->select(['name', 'id'])
+            ->indexBy('id')
+            ->column();
     }
 
-    public function getLastopyt(){
-        
+    public function getLastopyt()
+    {
         return $this->getOpyts()->orderBy('id DESC')->limit(1)->one();
-
     }
 
     public function getGrafiksNamesStr()
-    {   $grafik_array = [];
+    {
+        $grafik_array = [];
 
-        foreach ($this->grafiks as $grafik)
-        {
-           $grafik_array[] = $grafik->name;
+        foreach ($this->grafiks as $grafik) {
+            $grafik_array[] = $grafik->name;
         }
-
-        return implode(", ",$grafik_array);
+        return implode(", ", $grafik_array);
     }
-    
+
     public function getZanyatostNamesStr()
-    {   $zanyatost_array = [];
-
-        foreach ($this->zanyatosts as $z)
-        {
-           $zanyatost_array[] = $z->name;
+    {
+        $zanyatost_array = [];
+        foreach ($this->zanyatosts as $z) {
+            $zanyatost_array[] = $z->name;
         }
-
-        return implode(", ",$zanyatost_array);
+        return implode(", ", $zanyatost_array);
     }
-
 }

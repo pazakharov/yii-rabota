@@ -5,7 +5,7 @@ use app\models\common\Zanaytost;
 use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-Use app\models\Specializations;
+use app\models\Specializations;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -16,21 +16,18 @@ use yii\helpers\Url;
 
 <div class="col-12">
     <div style="height:0;" class="row hidden">
-        <?php $form = ActiveForm::begin(['options' => ['id'=>'resumeFotoForm','enctype' => 'multipart/form-data']]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['id' => 'resumeFotoForm', 'enctype' => 'multipart/form-data']]); ?>
         <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
         <?php ActiveForm::end(); ?>
     </div>
     <!--END FORM 1-->
-    <?php $form = ActiveForm::begin([
-              
-       
-    ]); ?>
+    <?php $form = ActiveForm::begin([]); ?>
     <div class="row mb32">
         <div class="col-lg-2 col-md-3 dflex-acenter">
             <div class="paragraph">Фото</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="profile-foto-upload mb8"><img id="resumeimg" src="<?=$model->foto;?>" alt="foto">
+            <div class="profile-foto-upload mb8"><img id="resumeimg" src="<?= $model->foto; ?>" alt="foto">
             </div>
             <label id="fotochooser" class="custom-file-upload">
                 <?= $form->field($model, 'foto')->hiddenInput()->label(false); ?>
@@ -44,7 +41,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
 
-            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100' ])->label(false) ;?>
+            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100'])->label(false); ?>
         </div>
     </div>
     <div class="row mb16">
@@ -52,7 +49,7 @@ use yii\helpers\Url;
             <div class="paragraph">Имя</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'first_name')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
+            <?= $form->field($model, 'first_name')->textInput(['class' => 'dor-input w100'])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -60,7 +57,7 @@ use yii\helpers\Url;
             <div class="paragraph">Отчество</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'middle_name')->textInput(['class' => 'dor-input w100' ])->label(false)->label(false) ?>
+            <?= $form->field($model, 'middle_name')->textInput(['class' => 'dor-input w100'])->label(false)->label(false) ?>
         </div>
     </div>
     <div class="row mb24">
@@ -69,10 +66,10 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
-                <?= $form->field($model, 'birthdate')->textInput(['class' => 'dor-input dpicker datepicker-input',
-                                                                'value' => strpos($model->birthdate,'-')?\DateTime::createFromFormat('Y-m-d',$model->birthdate)->format('d.m.Y'):$model->birthdate
-                                                                ]
-                )->label(false) ?>
+                <?= $form->field($model, 'birthdate')->textInput([
+                    'class' => 'dor-input dpicker datepicker-input',
+                    'value' => strpos($model->birthdate, '-') ? \DateTime::createFromFormat('Y-m-d', $model->birthdate)->format('d.m.Y') : $model->birthdate
+                ])->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">
             </div>
         </div>
@@ -83,23 +80,25 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
-                <?=$form->field($model, 'sex')
-                        ->radioList(
-                            [1 => 'Мужской', 2 => 'Женский'],
-                            [
-                                'item' => function($index, $label, $name, $checked, $value) {
+                <?= $form->field($model, 'sex')
+                    ->radioList(
+                        [1 => 'Мужской', 2 => 'Женский'],
+                        [
+                            'item' => function ($index, $label, $name, $checked, $value) {
 
-                                    $ch = '';
-                                    if($checked == 1) {$ch = 'checked';}
-
-                                    $return = '<li><input type="radio" id="test'.$index.'" name="'.$name.'" value="'.$value.'"'.$ch.'>';
-                                    $return .=  '<label for="test'.$index.'">'.ucwords($label).'</label></li>';
-                                    
-                                    
-                                  return $return;
+                                $ch = '';
+                                if ($checked == 1) {
+                                    $ch = 'checked';
                                 }
-                            ]
-                        )
+
+                                $return = '<li><input type="radio" id="test' . $index . '" name="' . $name . '" value="' . $value . '"' . $ch . '>';
+                                $return .=  '<label for="test' . $index . '">' . ucwords($label) . '</label></li>';
+
+
+                                return $return;
+                            }
+                        ]
+                    )
                     ->label(false);
                 ?>
             </ul>
@@ -110,7 +109,7 @@ use yii\helpers\Url;
             <div class="paragraph">Город проживания</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
+            <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100'])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -125,7 +124,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="p-rel">
-                <?= $form->field($model, 'mail')->textInput(['class' => 'dor-input w100' ])->label(false) ?>
+                <?= $form->field($model, 'mail')->textInput(['class' => 'dor-input w100'])->label(false) ?>
             </div>
         </div>
     </div>
@@ -135,7 +134,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div style="width: 140px;" class="p-rel mobile-w100">
-                <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100' , 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>
+                <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100', 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>
             </div>
         </div>
     </div>
@@ -150,7 +149,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="citizenship-select">
-                <?= $form->field($model, 'specialization_id')->dropDownList($model->getAvailibleSpecializations(),['prompt'=>'Выберете специализацию..','class' => 'nselectlist-static'])->label(false) ?>
+                <?= $form->field($model, 'specialization_id')->dropDownList($model->getAvailibleSpecializations(), ['prompt' => 'Выберете специализацию..', 'class' => 'nselectlist-static'])->label(false) ?>
 
 
 
@@ -163,12 +162,13 @@ use yii\helpers\Url;
             <div class="paragraph">Зарплата</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="p-rel"> <img class="rub-icon" src="images/rub-icon.svg" alt="rub-icon">
-                <?= $form->field($model, 'zp')->textInput(['class' => 'dor-input w100',
-                                                            'placeholder' => "От" 
-                                                            ])->label(false) ?>
+            <div class="p-rel">
+                <?= $form->field($model, 'zp')->textInput([
+                    'class' => 'dor-input w100',
+                    'placeholder' => "От"
+                ])->label(false) ?>
 
-               
+
             </div>
         </div>
     </div>
@@ -179,22 +179,23 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model,'ZArray')->checkboxList($model->getAvailibleZanyatost(),[
-                                                                'item'=>function ($index, $label, $name, $checked, $value){
-                                                                    $ch = '';
-                                                                    if($checked == 1) {$ch = 'checked';}
+                <?= $form->field($model, 'ZArray')->checkboxList($model->getAvailibleZanyatost(), [
+                    'item' => function ($index, $label, $name, $checked, $value) {
+                        $ch = '';
+                        if ($checked == 1) {
+                            $ch = 'checked';
+                        }
 
-                                                                                return '<div class="form-check d-flex">
-                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input" value="'.$value.'"
-                                                                                        id="zCheck'.$index.'" '.$ch.'>
+                        return '<div class="form-check d-flex">
+                                                                                    <input name="' . $name . '" type="checkbox" class="form-check-input" value="' . $value . '"
+                                                                                        id="zCheck' . $index . '" ' . $ch . '>
                                                                                     <label class="form-check-label"
-                                                                                        for="zCheck'.$index.'"></label>
-                                                                                    <label for="zCheck'.$index.'"
-                                                                                        class="profile-info__check-text job-resolution-checkbox">'.$label.'</label>
+                                                                                        for="zCheck' . $index . '"></label>
+                                                                                    <label for="zCheck' . $index . '"
+                                                                                        class="profile-info__check-text job-resolution-checkbox">' . $label . '</label>
                                                                                 </div>';
-                                    
-                                                                        }
-                                                            ])->label(false);  ?>
+                    }
+                ])->label(false);  ?>
 
             </div>
         </div>
@@ -206,22 +207,23 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model,'GrafikArray')->checkboxList($model->getAvailibleGrafiks(),[
-                                                                'item'=>function ($index, $label, $name, $checked, $value){
-                                                                    $ch = '';
-                                                                    if($checked == 1) {$ch = 'checked';}
+                <?= $form->field($model, 'GrafikArray')->checkboxList($model->getAvailibleGrafiks(), [
+                    'item' => function ($index, $label, $name, $checked, $value) {
+                        $ch = '';
+                        if ($checked == 1) {
+                            $ch = 'checked';
+                        }
 
-                                                                                return '<div class="form-check d-flex">
-                                                                                    <input name="'.$name.'" type="checkbox" class="form-check-input" value="'.$value.'"
-                                                                                        id="grafikCheck'.$index.'" '.$ch.'>
+                        return '<div class="form-check d-flex">
+                                                                                    <input name="' . $name . '" type="checkbox" class="form-check-input" value="' . $value . '"
+                                                                                        id="grafikCheck' . $index . '" ' . $ch . '>
                                                                                     <label class="form-check-label"
-                                                                                        for="grafikCheck'.$index.'"></label>
-                                                                                    <label for="grafikCheck'.$index.'"
-                                                                                        class="profile-info__check-text job-resolution-checkbox">'.$label.'</label>
+                                                                                        for="grafikCheck' . $index . '"></label>
+                                                                                    <label for="grafikCheck' . $index . '"
+                                                                                        class="profile-info__check-text job-resolution-checkbox">' . $label . '</label>
                                                                                 </div>';
-                                    
-                                                                        }
-                                                            ])->label(false);  ?>
+                    }
+                ])->label(false);  ?>
             </div>
         </div>
     </div>
@@ -237,50 +239,55 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
 
-              <?=$form->field($model, 'opyt_check')
-                        ->radioList(
-                            [1 => 'Есть опыт', 0 => 'Нет опыта работы'],
-                            [
-                                'item' => function($index, $label, $name, $checked, $value) {
+                <?= $form->field($model, 'opyt_check')
+                    ->radioList(
+                        [1 => 'Есть опыт', 0 => 'Нет опыта работы'],
+                        [
+                            'item' => function ($index, $label, $name, $checked, $value) {
 
-                                    $ch = '';
-                                    if($checked == 1) {$ch = 'checked';}
-
-                                    $return = '<li><input type="radio" id="opyt_radio'.$index.'" name="'.$name.'" value="'.$value.'"'.$ch.'>';
-                                    $return .=  '<label for="opyt_radio'.$index.'">'.ucwords($label).'</label></li>';
-                                    
-                                    
-                                  return $return;
+                                $ch = '';
+                                if ($checked == 1) {
+                                    $ch = 'checked';
                                 }
-                            ]
-                        )
-                    ->label(false);?>
+
+                                $return = '<li><input type="radio" id="opyt_radio' . $index . '" name="' . $name . '" value="' . $value . '"' . $ch . '>';
+                                $return .=  '<label for="opyt_radio' . $index . '">' . ucwords($label) . '</label></li>';
+
+
+                                return $return;
+                            }
+                        ]
+                    )
+                    ->label(false); ?>
 
 
             </ul>
         </div>
     </div>
 
-    <div id="exp_div" class="row <?php if($model->opyt_check === 0){echo 'hidden';}?>">
-     
-    <?php 
-    
-    $index = 0;
-   
-    foreach($model->opyts as $rabota){
+    <div id="exp_div" class="row <?php if ($model->opyt_check === 0) {
+                                        echo 'hidden';
+                                    } ?>">
 
-        echo $this->render('_opyt', ['rabota' => $rabota,'index' => $index, 'form' => $form]);
-       
-        $index++;
+        <?php
 
-    }
-    
-    
-    
-    ?>
+        $index = 0;
+
+        foreach ($model->opyts as $rabota) {
+
+            echo $this->render('_opyt', ['rabota' => $rabota, 'index' => $index, 'form' => $form]);
+
+            $index++;
+        }
+
+
+
+        ?>
 
     </div>
-    <div id="add_div" class="row mb32 <?php if($model->opyt_check === 0){echo 'hidden';}?>">
+    <div id="add_div" class="row mb32 <?php if ($model->opyt_check === 0) {
+                                            echo 'hidden';
+                                        } ?>">
         <div class="row"><button type="button" class="btn btn-link" id="add">+ Добавить место работы</button></div>
     </div>
 
@@ -294,7 +301,7 @@ use yii\helpers\Url;
             <div class="paragraph">О себе</div>
         </div>
         <div class="col-lg-5 col-md-7 col-12">
-            <?= $form->field($model, 'about')->textarea(['class'=>'dor-input w100 h176 mb8'])->label(false) ?>
+            <?= $form->field($model, 'about')->textarea(['class' => 'dor-input w100 h176 mb8'])->label(false) ?>
         </div>
     </div>
     <div class="row mb128 mobile-mb64">
@@ -353,7 +360,7 @@ use yii\helpers\Url;
                     <div class="d-flex justify-content-between">
                         <div class="citizenship-select w100 mr16">
                             <select name="Resume[opyt][iteration][month2]" class="nselectlist" data-title="Месяц">
-                            <option value="01">Январь</option>
+                                <option value="01">Январь</option>
                                 <option value="02">Февраль</option>
                                 <option value="03">Март</option>
                                 <option value="04">Апрель</option>
@@ -409,9 +416,8 @@ use yii\helpers\Url;
                     <div class="paragraph">Обязанности, функции, достижения</div>
                 </div>
                 <div class="col-lg-4 col-md-6 col-12">
-                    <textarea name="Resume[opyt][iteration][duties]" class="dor-input w100 h96 mb8"
-                        placeholder="Расскажите о своих обязанностях, функциях и достижениях"></textarea>
-                            <div class="mb24"><button type="button" class="delbutton btn btn-link">Удалить место работы</button></div>
+                    <textarea name="Resume[opyt][iteration][duties]" class="dor-input w100 h96 mb8" placeholder="Расскажите о своих обязанностях, функциях и достижениях"></textarea>
+                    <div class="mb24"><button type="button" class="delbutton btn btn-link">Удалить место работы</button></div>
 
                 </div>
             </div>
@@ -419,5 +425,5 @@ use yii\helpers\Url;
     </div>
 </div>
 <script>
-    var UrlFotoForm = "<?php echo Url::toRoute('resume/upload');?>";
+    var UrlFotoForm = "<?php echo Url::toRoute('resume/upload'); ?>";
 </script>

@@ -21,13 +21,13 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
-         
+
         ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\PjaxAsset' => [
                     'sourcePath' => null,
-                    'js'=> []
+                    'js' => []
                 ],
             ],
         ],
