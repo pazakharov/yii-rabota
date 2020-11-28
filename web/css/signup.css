@@ -1,0 +1,13 @@
+.help-block{
+    display: block;
+    position: absolute;
+    left: 484px;
+    top: 30px;
+    width: 400px;
+    color: #dc3545;
+}
+
+.input-wrap{
+position: relative;    
+
+}
