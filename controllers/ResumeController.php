@@ -57,21 +57,15 @@ class ResumeController extends Controller
     public function actionIndex()
     {
         $searchModel = new ResumeSearch();
-
         $params = Yii::$app->request->queryParams;
-
         $dataProvider = $searchModel->search($params);
-
         $query = new Query();
-
         $cities = $query->select('city')
             ->from('resume')
             ->GroupBy('city')
             ->createCommand()
             ->queryColumn();
-
         $cities = array_combine(array_values($cities), array_values($cities));
-
         return $this->render('index_new', [
             'dataProvider' => $dataProvider,
             'params' =>  $params,
@@ -86,9 +80,7 @@ class ResumeController extends Controller
     public function actionMyresume()
     {
         $searchModel = new ResumeSearch();
-
         $dataProvider = $searchModel->search(['author_id' => Yii::$app->user->id]);
-
         return $this->render('my_resume', ['dataProvider' => $dataProvider]);
     }
 
@@ -102,9 +94,7 @@ class ResumeController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-
             'model' => $this->findModel($id),
-
         ]);
     }
 
@@ -140,11 +130,9 @@ class ResumeController extends Controller
      */
 
     public function actionUpdate($id)
-
     {
         $image = new UploadImage();
         $resume = Resume::find()->where(['id' => $id])->one();
-
         if ($resume->load(Yii::$app->request->post()) && $resume->save()) {
             return $this->redirect(['view', 'id' => $resume->id]);
         }
@@ -177,21 +165,15 @@ class ResumeController extends Controller
     {
 
         if (Yii::$app->request->isPost) {
-
             $imageModel = new UploadImage();
-
             $imageModel->imageFile = UploadedFile::getInstance($imageModel, "imageFile");
-
             if (Yii::$app->request->isPost) {
-
                 return $imageModel->upload();
             } else {
-
                 return "uploads/noavatar.png";
             }
         }
     }
-
     /**
      * Finds the Resume model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -204,7 +186,6 @@ class ResumeController extends Controller
         if (($model = Resume::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }
