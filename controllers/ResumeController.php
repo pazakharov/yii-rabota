@@ -164,7 +164,7 @@ class ResumeController extends Controller
     public function actionDelete($id)
     {
         $this->findModel(['id' => $id, 'author_id' => Yii::$app->user->id])->delete();
-        return $this->redirect(['index']);
+        return $this->redirect(['resume/myresume']);
     }
     /**
      * Upload foto for resume.
@@ -176,12 +176,9 @@ class ResumeController extends Controller
     public function actionUpload()
     {
 
-
         if (Yii::$app->request->isPost) {
 
             $imageModel = new UploadImage();
-
-
 
             $imageModel->imageFile = UploadedFile::getInstance($imageModel, "imageFile");
 
@@ -194,8 +191,6 @@ class ResumeController extends Controller
             }
         }
     }
-
-
 
     /**
      * Finds the Resume model based on its primary key value.
