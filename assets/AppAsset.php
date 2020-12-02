@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -26,10 +27,8 @@ class AppAsset extends AssetBundle
         'css/jquery.nselect.css',
         'css/tagsinput.css',
     ];
-    public $js = [
-    ];
+    public $js = [];
     public $depends = [
-            'yii\web\JqueryAsset',
-    //    'yii\bootstrap\BootstrapAsset',
+        'yii\web\JqueryAsset',
     ];
 }

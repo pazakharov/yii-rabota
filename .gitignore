@@ -3,6 +3,7 @@
 .vscode
 # netbeans project files
 nbproject
+/config/db.php
 
 # zend studio for eclipse project files
 .buildpath
