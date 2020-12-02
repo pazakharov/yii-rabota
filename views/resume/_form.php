@@ -1,15 +1,12 @@
 <?php
 
-use app\models\common\Schedule;
-use app\models\common\Employment;
-use app\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\models\Specializations;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Resume */
+/* @var $resume app\models\Resume */
+/* @var $image app\models\Image */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -17,20 +14,20 @@ use yii\helpers\Url;
 <div class="col-12">
     <div style="height:0;" class="row hidden">
         <?php $form = ActiveForm::begin(['options' => ['id' => 'resumeFotoForm', 'enctype' => 'multipart/form-data']]); ?>
-        <?= $form->field($model2, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
+        <?= $form->field($image, 'imageFile')->fileInput(['id' => 'resumeFotoFile'])->label(false) ?>
         <?php ActiveForm::end(); ?>
     </div>
-    <!--END FORM 1-->
+
     <?php $form = ActiveForm::begin([]); ?>
     <div class="row mb32">
         <div class="col-lg-2 col-md-3 dflex-acenter">
             <div class="paragraph">Фото</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <div class="profile-foto-upload mb8"><img id="resumeimg" src="<?= $model->foto; ?>" alt="foto">
+            <div class="profile-foto-upload mb8"><img id="resumeimg" src="<?= $resume->foto; ?>" alt="foto">
             </div>
             <label id="fotochooser" class="custom-file-upload">
-                <?= $form->field($model, 'foto')->hiddenInput()->label(false); ?>
+                <?= $form->field($resume, 'foto')->hiddenInput()->label(false); ?>
                 Изменить фото
             </label>
         </div>
@@ -41,7 +38,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
 
-            <?= $form->field($model, 'last_name')->textInput(['class' => 'dor-input w100'])->label(false); ?>
+            <?= $form->field($resume, 'last_name')->textInput(['class' => 'dor-input w100'])->label(false); ?>
         </div>
     </div>
     <div class="row mb16">
@@ -49,7 +46,7 @@ use yii\helpers\Url;
             <div class="paragraph">Имя</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'first_name')->textInput(['class' => 'dor-input w100'])->label(false) ?>
+            <?= $form->field($resume, 'first_name')->textInput(['class' => 'dor-input w100'])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -57,7 +54,7 @@ use yii\helpers\Url;
             <div class="paragraph">Отчество</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'middle_name')->textInput(['class' => 'dor-input w100'])->label(false)->label(false) ?>
+            <?= $form->field($resume, 'middle_name')->textInput(['class' => 'dor-input w100'])->label(false)->label(false) ?>
         </div>
     </div>
     <div class="row mb24">
@@ -66,9 +63,9 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="datepicker-wrap input-group date">
-                <?= $form->field($model, 'birthdate')->textInput([
+                <?= $form->field($resume, 'birthdate')->textInput([
                     'class' => 'dor-input dpicker datepicker-input',
-                    'value' => strpos($model->birthdate, '-') ? \DateTime::createFromFormat('Y-m-d', $model->birthdate)->format('d.m.Y') : $model->birthdate
+                    'value' => strpos($resume->birthdate, '-') ? \DateTime::createFromFormat('Y-m-d', $resume->birthdate)->format('d.m.Y') : $resume->birthdate
                 ])->label(false) ?>
                 <img src="images/mdi_calendar_today.svg" alt="">
             </div>
@@ -80,7 +77,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
-                <?= $form->field($model, 'sex')
+                <?= $form->field($resume, 'sex')
                     ->radioList(
                         [1 => 'Мужской', 2 => 'Женский'],
                         [
@@ -109,7 +106,7 @@ use yii\helpers\Url;
             <div class="paragraph">Город проживания</div>
         </div>
         <div class="col-lg-3 col-md-4 col-11">
-            <?= $form->field($model, 'city')->textInput(['class' => 'dor-input w100'])->label(false) ?>
+            <?= $form->field($resume, 'city')->textInput(['class' => 'dor-input w100'])->label(false) ?>
         </div>
     </div>
     <div class="row mb16">
@@ -124,7 +121,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="p-rel">
-                <?= $form->field($model, 'mail')->textInput(['class' => 'dor-input w100'])->label(false) ?>
+                <?= $form->field($resume, 'mail')->textInput(['class' => 'dor-input w100'])->label(false) ?>
             </div>
         </div>
     </div>
@@ -134,7 +131,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div style="width: 140px;" class="p-rel mobile-w100">
-                <?= $form->field($model, 'phone')->textInput(['class' => 'dor-input w100', 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>
+                <?= $form->field($resume, 'phone')->textInput(['class' => 'dor-input w100', 'placeholder' => '+7 ___ ___-__-__'])->label(false) ?>
             </div>
         </div>
     </div>
@@ -149,7 +146,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="citizenship-select">
-                <?= $form->field($model, 'specialization_id')->dropDownList($model->getAvailibleSpecializations(), ['prompt' => 'Выберете специализацию..', 'class' => 'nselectlist-static'])->label(false) ?>
+                <?= $form->field($resume, 'specialization_id')->dropDownList($resume->getAvailibleSpecializations(), ['prompt' => 'Выберете специализацию..', 'class' => 'nselectlist-static'])->label(false) ?>
 
 
 
@@ -163,7 +160,7 @@ use yii\helpers\Url;
         </div>
         <div class="col-lg-3 col-md-4 col-11">
             <div class="p-rel">
-                <?= $form->field($model, 'zp')->textInput([
+                <?= $form->field($resume, 'zp')->textInput([
                     'class' => 'dor-input w100',
                     'placeholder' => "От"
                 ])->label(false) ?>
@@ -179,7 +176,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model, 'ZArray')->checkboxList($model->getAvailibleEmployments(), [
+                <?= $form->field($resume, 'ZArray')->checkboxList($resume->getAvailibleEmployments(), [
                     'item' => function ($index, $label, $name, $checked, $value) {
                         $ch = '';
                         if ($checked == 1) {
@@ -207,7 +204,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <div class="profile-info">
 
-                <?= $form->field($model, 'ScheduleArray')->checkboxList($model->getAvailibleSchedules(), [
+                <?= $form->field($resume, 'ScheduleArray')->checkboxList($resume->getAvailibleSchedules(), [
                     'item' => function ($index, $label, $name, $checked, $value) {
                         $ch = '';
                         if ($checked == 1) {
@@ -239,7 +236,7 @@ use yii\helpers\Url;
         <div class="col-lg-3 col-md-4 col-11">
             <ul class="card-ul-radio profile-radio-list">
 
-                <?= $form->field($model, 'experience_check')
+                <?= $form->field($resume, 'experience_check')
                     ->radioList(
                         [1 => 'Есть опыт', 0 => 'Нет опыта работы'],
                         [
@@ -265,7 +262,7 @@ use yii\helpers\Url;
         </div>
     </div>
 
-    <div id="exp_div" class="row <?php if ($model->experience_check === 0) {
+    <div id="exp_div" class="row <?php if ($resume->experience_check === 0) {
                                         echo 'hidden';
                                     } ?>">
 
@@ -273,7 +270,7 @@ use yii\helpers\Url;
 
         $index = 0;
 
-        foreach ($model->experiencs as $rabota) {
+        foreach ($resume->experiencs as $rabota) {
 
             echo $this->render('_experience', ['rabota' => $rabota, 'index' => $index, 'form' => $form]);
 
@@ -285,7 +282,7 @@ use yii\helpers\Url;
         ?>
 
     </div>
-    <div id="add_div" class="row mb32 <?php if ($model->experience_check === 0) {
+    <div id="add_div" class="row mb32 <?php if ($resume->experience_check === 0) {
                                             echo 'hidden';
                                         } ?>">
         <div class="row"><button type="button" class="btn btn-link" id="add">+ Добавить место работы</button></div>
@@ -301,7 +298,7 @@ use yii\helpers\Url;
             <div class="paragraph">О себе</div>
         </div>
         <div class="col-lg-5 col-md-7 col-12">
-            <?= $form->field($model, 'about')->textarea(['class' => 'dor-input w100 h176 mb8'])->label(false) ?>
+            <?= $form->field($resume, 'about')->textarea(['class' => 'dor-input w100 h176 mb8'])->label(false) ?>
         </div>
     </div>
     <div class="row mb128 mobile-mb64">

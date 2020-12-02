@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Шаблон вывода одного резюме в myResume
+ * @var $model app\models\Resume 
+ */
+
 use yii\helpers\Url;
 
 ?>
@@ -21,17 +26,13 @@ use yii\helpers\Url;
             </div>
             <div class="d-flex ml8 align-items-start flex-wrap flex-column mb8 ">
                 <h2 class="mini-title mb8"><?= $model->specialization->name ?></h2>
-
+                <h5 class="mini-title mb8">
+                    <div class="paragraph mr16"><strong><?= $model->first_name ?> <?= $model->middle_name ?> <?= $model->last_name ?></strong></div>
+                </h5>
                 <span class="mr16 paragraph"><?= $model->zp ?> ₽</span>
                 <span class="mr16 paragraph"><?= (isset($model->lastexperience->position)) ? 'Опыт работы ' . $model->stag : 'Без опыта' ?></span></span>
                 <span class="mr16 paragraph"><?= $model->city ?></span>
             </div>
-            <!-- <div class="d-flex flex-wrap">
-            <div class="paragraph mr16">
-                <strong>Просмотров</strong>
-                <span class="grey">26</span>
-            </div>
-        </div> -->
         </div>
         <div class="col-xl-12 d-flex justify-content-between align-items-center flex-wrap">
             <div class="d-flex flex-wrap mobile-mb12">

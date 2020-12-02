@@ -5,9 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use app\models\Resume;
 use yii\widgets\ListView;
-use yii\helpers\ArrayHelper;
 use \app\models\Specializations;
-use app\models\common\Employment;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ResumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -40,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= ListView::widget([
                     'dataProvider' => $dataProvider,
-                    'itemView' => '_short_resume',
+                    'itemView' => '_templateForAllResume',
                     'itemOptions' => ['tag' => false],
                     'layout' =>  $this->render('_summary'),
                 ]); ?>

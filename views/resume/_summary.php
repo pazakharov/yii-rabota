@@ -1,4 +1,10 @@
-<?php use yii\helpers\Url;
+<?php
+/*
+* layout для listview в allResume 
+*/
+
+
+use yii\helpers\Url;
 ?>
 
 <div class="d-flex align-items-center flex-wrap mb8">
@@ -12,8 +18,7 @@
             </div>
         </div>
         <div class="vakancy-page-wrap show">
-            <a class="vakancy-page-btn vakancy-btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="vakancy-page-btn vakancy-btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 По новизне
                 <i class="fas fa-angle-down arrowDown"></i>
             </a>

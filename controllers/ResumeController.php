@@ -3,13 +3,13 @@
 namespace app\controllers;
 
 use Yii;
-use yii\db\Query;
 use app\models\Resume;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\UploadImage;
 use yii\filters\VerbFilter;
 use app\models\ResumeSearch;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 
@@ -39,7 +39,7 @@ class ResumeController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'myresume', 'update', 'create', 'delete', 'index', 'view', 'upload'],
+                        'actions' => ['logout', 'my-resume', 'update', 'create', 'delete', 'index', 'view', 'upload'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -59,17 +59,11 @@ class ResumeController extends Controller
         $searchModel = new ResumeSearch();
         $params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
-        $query = new Query();
-        $cities = $query->select('city')
-            ->from('resume')
-            ->GroupBy('city')
-            ->createCommand()
-            ->queryColumn();
-        $cities = array_combine(array_values($cities), array_values($cities));
-        return $this->render('index_new', [
+
+        return $this->render('allResume', [
             'dataProvider' => $dataProvider,
             'params' =>  $params,
-            'cities' => $cities
+            'cities' => Resume::getAvalibleCitiesArray()
         ]);
     }
 
@@ -77,11 +71,14 @@ class ResumeController extends Controller
      * @return mixed
      * 
      */
-    public function actionMyresume()
+    public function actionMyResume()
     {
-        $searchModel = new ResumeSearch();
-        $dataProvider = $searchModel->search(['author_id' => Yii::$app->user->id]);
-        return $this->render('my_resume', ['dataProvider' => $dataProvider]);
+        return $this->render('myResume', [
+            'dataProvider' => new ActiveDataProvider([
+                'query' => Resume::find()->where(['author_id' => Yii::$app->user->id]),
+                'pagination' => ['pageSize' => 10]
+            ])
+        ]);
     }
 
     /**
@@ -94,7 +91,7 @@ class ResumeController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'resume' => $this->findModel($id),
         ]);
     }
 
@@ -116,8 +113,8 @@ class ResumeController extends Controller
         $resume->birthdate = date('Y-m-d');
 
         return $this->render('create', [
-            'model' => $resume,
-            'model2' => $image,
+            'resume' => $resume,
+            'image' => $image,
         ]);
     }
 
@@ -137,8 +134,8 @@ class ResumeController extends Controller
             return $this->redirect(['view', 'id' => $resume->id]);
         }
         return $this->render('update', [
-            'model' => $resume,
-            'model2' => $image,
+            'resume' => $resume,
+            'image' => $image,
         ]);
     }
 
@@ -151,8 +148,8 @@ class ResumeController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel(['id' => $id, 'author_id' => Yii::$app->user->id])->delete();
-        return $this->redirect(['resume/myresume']);
+        $this->findModel($id, Yii::$app->user->id)->delete();
+        return $this->redirect(['resume/my-resume']);
     }
     /**
      * Upload foto for resume.
@@ -181,11 +178,15 @@ class ResumeController extends Controller
      * @return Resume the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($id, $author_id = null)
     {
-        if (($model = Resume::findOne($id)) !== null) {
-            return $model;
+        $resumeQuery = Resume::find()->where(['id' => $id]);
+        if ($author_id) {
+            $resumeQuery->FilterWhere(['author_id' => $author_id]);
         }
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        if (($resume = $resumeQuery->one()) !== null) {
+            return $resume;
+        }
+        throw new NotFoundHttpException(Yii::t('app', 'Запрошенная страница не найдена.'));
     }
 }

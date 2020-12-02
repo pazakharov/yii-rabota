@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 use app\models\Experience;
 use app\models\common\Schedule;
 use app\models\common\Employments;
@@ -264,13 +265,10 @@ class Resume extends \yii\db\ActiveRecord
     }
 
     /**
-     * {@inheritdoc}
-     * @return \app\Query\models\ResumeQuery the active query used by this AR class.
+     * @param mixed $insert
+     * 
+     * @return [type]
      */
-    public static function find()
-    {
-        return new \app\Query\models\ResumeQuery(get_called_class());
-    }
     public function beforeSave($insert)
     {
         $this->birthdate = \DateTime::createFromFormat('d.m.Y', $this->birthdate)->format('Y-m-d');
@@ -404,11 +402,19 @@ class Resume extends \yii\db\ActiveRecord
             ->column();
     }
 
+    /**
+     * Последний опыт работы или ничего
+     * @return mix
+     */
     public function getLastexperience()
     {
         return $this->getExperiencs()->orderBy('id DESC')->limit(1)->one();
     }
 
+    /**
+     * Строка с наименованиями видов графиков для резюме
+     * @return string
+     */
     public function getSchedulesNamesStr()
     {
         $schedule_array = [];
@@ -419,6 +425,10 @@ class Resume extends \yii\db\ActiveRecord
         return implode(", ", $schedule_array);
     }
 
+    /**
+     * Строка с наименованиями видов занятостей для резюме
+     * @return string
+     */
     public function getEmploymentNamesStr()
     {
         $employment_array = [];
@@ -426,5 +436,20 @@ class Resume extends \yii\db\ActiveRecord
             $employment_array[] = $z->name;
         }
         return implode(", ", $employment_array);
+    }
+
+    /**
+     * Список городов встречающихся в резюме
+     * @return array 
+     */
+    public static function getAvalibleCitiesArray()
+    {
+        $query = new Query();
+        $cities = $query->select('city')
+            ->from('resume')
+            ->GroupBy('city')
+            ->createCommand()
+            ->queryColumn();
+        return array_combine(array_values($cities), array_values($cities));
     }
 }

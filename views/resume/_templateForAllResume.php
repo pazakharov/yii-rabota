@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Шаблон вывода одного резюме в allResume
+ * @var $model app\models\Resume 
+ */
+
 use yii\helpers\Url;
 ?>
 <div class="vakancy-page-block company-list-search__block resume-list__block p-rel mb16">

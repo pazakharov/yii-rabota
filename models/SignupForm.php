@@ -1,6 +1,8 @@
 <?php
+
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use app\models\User;
 
@@ -37,6 +39,18 @@ class SignupForm extends Model
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => Yii::t('app', 'Имя пользователя'),
+            'password' => Yii::t('app', 'Пароль'),
+            'email' => Yii::t('app', 'Электронная почта'),
+        ];
+    }
+
+    /**
      * Signs user up.
      *
      * @return User|null the saved model or null if saving fails
@@ -46,13 +60,13 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
+
         return $user->save() ? $user : null;
     }
 }
