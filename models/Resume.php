@@ -272,6 +272,7 @@ class Resume extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         $this->birthdate = \DateTime::createFromFormat('d.m.Y', $this->birthdate)->format('Y-m-d');
+
         return parent::beforeSave($insert);
     }
 
@@ -451,5 +452,19 @@ class Resume extends \yii\db\ActiveRecord
             ->createCommand()
             ->queryColumn();
         return array_combine(array_values($cities), array_values($cities));
+    }
+
+    public function transactionSave()
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $this->save();
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+            return false;
+            Yii::$app->session->addFlash('error', 'Не удалось сохранить резюме');
+        }
+        return true;
     }
 }

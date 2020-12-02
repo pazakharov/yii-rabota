@@ -97,7 +97,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php foreach ($resume->experiencs as $experience) :  ?>
                                 <div class="row mb16">
                                     <div class="col-md-4 mb16">
-                                        <div class="paragraph tbold mb8"><?php echo $experience->month1; ?> <?php echo $experience->year1; ?> - <?php echo $experience->month2; ?> <?php echo $experience->year2; ?></div>
+                                        <div class="paragraph tbold mb8">
+                                            <?php echo Yii::$app->formatter->asDate('01-' . $experience->month1 . '-' . $experience->year1, 'LLLL YYYY'); ?> -
+                                            <?php echo Yii::$app->formatter->asDate('01-' . $experience->month2 . '-' . $experience->year2, 'LLLL YYYY'); ?>
+                                        </div>
+
                                         <div class="mini-paragraph"></div>
                                     </div>
                                     <div class="col-md-8">

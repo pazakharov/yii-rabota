@@ -105,7 +105,7 @@ class ResumeController extends Controller
         $resume = new Resume();
         $image = new UploadImage();
 
-        if ($resume->load(Yii::$app->request->post()) && ($resume->save())) {
+        if ($resume->load(Yii::$app->request->post()) && ($resume->transactionSave())) {
             return $this->redirect(['view', 'id' => $resume->id]);
         }
 
@@ -130,7 +130,7 @@ class ResumeController extends Controller
     {
         $image = new UploadImage();
         $resume = Resume::find()->where(['id' => $id])->one();
-        if ($resume->load(Yii::$app->request->post()) && $resume->save()) {
+        if ($resume->load(Yii::$app->request->post()) && $resume->transactionSave()) {
             return $this->redirect(['view', 'id' => $resume->id]);
         }
         return $this->render('update', [
